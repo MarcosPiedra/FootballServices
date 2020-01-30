@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using FootballServices.Domain;
 using FootballServices.Domain.Models;
 using FootballServices.SqlDataAccess;
 using System;
@@ -16,6 +17,7 @@ namespace FootballServices.WebAPI.AutofacModule
                    .As(typeof(IRepository<>))
                    .InstancePerDependency();
 
+            builder.RegisterType<ManagerService>().As<IManagerService>();
             //builder.RegisterType<EFRepository<Manager>>().As<IRepository<Manager>>();
         }
     }

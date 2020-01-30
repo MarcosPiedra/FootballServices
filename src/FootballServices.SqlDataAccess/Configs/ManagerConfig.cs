@@ -11,7 +11,7 @@ namespace FootballServices.SqlDataAccess.Configs
     {
         public void Configure(EntityTypeBuilder<Manager> builder)
         {
-            builder.ToTable("Manager");
+            builder.ToTable("Managers");
 
             builder.Property(m => m.Id).HasColumnName("Id");
             builder.Property(m => m.Name).HasColumnName("Name");

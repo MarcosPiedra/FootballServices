@@ -31,4 +31,10 @@
     <ProjectReference Include="..\FootballServices.SqlDataAccess\FootballServices.SqlDataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="football.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

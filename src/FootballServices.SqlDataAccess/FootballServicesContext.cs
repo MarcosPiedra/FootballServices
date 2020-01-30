@@ -9,7 +9,10 @@ namespace FoorballServices.SqlDataAccess
     {
         public FootballServicesContext() : base()
         {
+        }
 
+        public FootballServicesContext(DbContextOptions<FootballServicesContext> options) : base(options)
+        {
         }
 
         public DbSet<Manager> Managers { get; set; }
