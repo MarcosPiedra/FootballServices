@@ -18,7 +18,6 @@ namespace FootballServices.WebAPI.AutofacModule
                    .InstancePerDependency();
 
             builder.RegisterType<ManagerService>().As<IManagerService>();
-            //builder.RegisterType<EFRepository<Manager>>().As<IRepository<Manager>>();
         }
     }
 }

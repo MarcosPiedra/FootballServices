@@ -6,9 +6,10 @@ namespace FootballServices.Domain
 {
     public interface IManagerService
     {
-        void Update(Manager manager);
-        void Add(Manager manager);
-        void Remove(Manager manager);
+        Task UpdateAsync(Manager manager);
+        Task AddAsync(Manager manager);
+        Task RemoveAsync(Manager manager);
+        Task<Manager> FindAsync(int id);
         Task<List<Manager>> GetAllAsync();
     }
 }

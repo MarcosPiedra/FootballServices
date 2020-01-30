@@ -22,6 +22,9 @@ using Quartz.Impl;
 using Quartz.Spi;
 using Microsoft.EntityFrameworkCore;
 using FoorballServices.SqlDataAccess;
+using FootballServices.Domain.Models;
+using FootballServices.SqlDataAccess;
+using FootballServices.Domain;
 
 namespace FootballServices
 {
@@ -63,18 +66,18 @@ namespace FootballServices
             services.AddSingleton(provider =>
             {
                 return JobBuilder.Create<MatchesJob>()
-                  .WithIdentity("Match.job", "group1")
-                  .Build();
+                                 .WithIdentity("Match.job", "group1")
+                                 .Build();
             });
             services.AddSingleton(provider =>
             {
                 return TriggerBuilder.Create()
-                .WithIdentity($"Match.trigger", "group1")
-                .StartNow()
-                .WithSimpleSchedule(s =>
-                    s.WithInterval(TimeSpan.FromSeconds(5))
-                     .RepeatForever())
-                 .Build();
+                                     .WithIdentity($"Match.trigger", "group1")
+                                     .StartNow()
+                                     .WithSimpleSchedule(s =>
+                                         s.WithInterval(TimeSpan.FromSeconds(5))
+                                          .RepeatForever())
+                                     .Build();
             });
 
             services.AddSingleton(provider =>
@@ -86,12 +89,15 @@ namespace FootballServices
                 scheduler.Start();
                 return scheduler;
             });
+
+            services.AddTransient<IRepository<Manager>, EFRepository<Manager>>();
+            services.AddTransient<IManagerService, ManagerService>();
         }
 
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            builder.RegisterModule(new Services());
-        }
+        //public void ConfigureContainer(ContainerBuilder builder)
+        //{
+        //    builder.RegisterModule(new Services());
+        //}
 
         public void Configure(IApplicationBuilder app,
                               IWebHostEnvironment env,

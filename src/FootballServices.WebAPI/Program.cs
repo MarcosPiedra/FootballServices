@@ -25,7 +25,7 @@ namespace FootballServices
                 logger.Debug("Init Main");
 
                 var host = Host.CreateDefaultBuilder(args)
-                               .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                               //.UseServiceProviderFactory(new AutofacServiceProviderFactory())
                                .ConfigureWebHostDefaults(webHostBuilder =>
                                {
                                    webHostBuilder.ConfigureLogging(logging => logging.ClearProviders())

@@ -40,9 +40,91 @@ namespace FootballServices.WebAPI.Controllers
                 return Ok();
             }
 
-            var mapped = this.mapper.Map<List<Manager>, List<ManagerResponse>>(managerList);
+            var managerResponseList = this.mapper.Map<List<Manager>, List<ManagerResponse>>(managerList);
 
-            return mapped;
+            return managerResponseList;
         }
+
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(ManagerResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult<ManagerResponse>> Get(int id)
+        {
+            var manager = await this.managerServices.FindAsync(id);
+
+            if (manager is null)
+            {
+                return NotFound();
+            }
+
+            var managerResponse = this.mapper.Map<Manager, ManagerResponse>(manager);
+
+            return managerResponse;
+        }
+
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<ActionResult> CreateManagerAsync([FromBody] ManagerRequest managerRequest)
+        {
+            if (managerRequest is null)
+            {
+                return BadRequest();
+            }
+
+            var manager = this.mapper.Map<ManagerRequest, Manager>(managerRequest);
+
+            await this.managerServices.AddAsync(manager);
+
+            return CreatedAtAction(nameof(CreateManagerAsync), new { id = manager.Id }, null);
+        }
+
+        [HttpPut("{id:int}")]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<ActionResult> UpdateManagerAsync(int id, [FromBody] ManagerRequest managerRequest)
+        {
+            if (id < 1 || managerRequest is null)
+            {
+                return BadRequest();
+            }
+
+            var managerToUpdate = await this.managerServices.FindAsync(id);
+            if (managerToUpdate is null)
+            {
+                return NotFound();
+            }
+
+            var manager = this.mapper.Map(managerRequest, managerToUpdate);
+
+            await this.managerServices.UpdateAsync(manager);
+
+            return CreatedAtAction(nameof(UpdateManagerAsync), new { id = manager.Id }, null);
+        }
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        public async Task<ActionResult> DeleteManagerByIdAsync(int id)
+        {
+            if (id < 1)
+            {
+                return BadRequest();
+            }
+
+            var managerToDelete = await this.managerServices.FindAsync(id);
+
+            if (managerToDelete is null)
+            {
+                return NotFound();
+            }
+
+            await this.managerServices.RemoveAsync(managerToDelete);
+
+            return NoContent();
+        }
+
     }
 }

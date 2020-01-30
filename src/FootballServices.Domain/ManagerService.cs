@@ -18,12 +18,26 @@ namespace FootballServices.Domain
             this.repository = repository;
         }
 
-        public void Add(Manager manager) => repository.Add(manager);
+        public async Task AddAsync(Manager manager)
+        {
+            await repository.AddAsync(manager);
+            await repository.SaveAsync();
+        }
+
+        public async Task<Manager> FindAsync(int id) => await repository.FindAsync(id);
 
         public async Task<List<Manager>> GetAllAsync() => await repository.Query.ToListAsync();
 
-        public void Remove(Manager manager) => repository.Remove(manager);
+        public async Task RemoveAsync(Manager manager)
+        {
+            repository.Remove(manager);
+            await repository.SaveAsync();
+        }
 
-        public void Update(Manager manager) => repository.Update(manager);
+        public async Task UpdateAsync(Manager manager)
+        {
+            repository.Update(manager);
+            await repository.SaveAsync();
+        }
     }
 }

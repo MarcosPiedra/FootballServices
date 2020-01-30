@@ -20,12 +20,12 @@ namespace FootballServices.SqlDataAccess
             this.dbContext = dbContext;
         }
 
-        public void Add(T item) => dbSet.Add(item);
+        public async Task AddAsync(T item) => await dbSet.AddAsync(item);
         public void Remove(T item) => dbSet.Remove(item);
         public IQueryable<T> Query => dbSet.AsNoTracking();
         public void Update(T item) => dbSet.Update(item);
-        public T Find(object id) => dbSet.Find(id);
-        public T Find(object id1, object id2) => dbSet.Find(id1, id2);
+        public async Task<T> FindAsync(object id) => await dbSet.FindAsync(id);
+        public async Task<T> FindAsync(object id1, object id2) => await dbSet.FindAsync(id1, id2);
         public async Task SaveAsync() => await dbContext.SaveChangesAsync();
     }
 }
