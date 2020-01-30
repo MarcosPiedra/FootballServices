@@ -3,28 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
+using FootballServices.Domain;
+using FootballServices.Domain.DTOs;
+using FootballServices.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace FootballServices.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ManagerController : Controller
     {
         private readonly ILogger<ManagerController> logger;
+        private readonly IManagerService managerServices;
+        private readonly IMapper mapper;
 
-        public ManagerController(ILogger<ManagerController> logger)
+        public ManagerController(ILogger<ManagerController> logger,
+                                 IManagerService managerServices,
+                                 IMapper mapper)
         {
             this.logger = logger;
+            this.managerServices = managerServices;
+            this.mapper = mapper;
         }
 
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Index()
+        [HttpGet]
+        [ProducesResponseType(typeof(List<ManagerResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<List<ManagerResponse>>> GetAll()
         {
-            NotFound();
-            BadRequest();
-            return View();
+            var managerList = await this.managerServices.GetAllAsync();
+
+            if (managerList is null)
+            {
+                return Ok();
+            }
+
+            var mapped = this.mapper.Map<List<Manager>, List<ManagerResponse>>(managerList);
+
+            return mapped;
         }
     }
 }

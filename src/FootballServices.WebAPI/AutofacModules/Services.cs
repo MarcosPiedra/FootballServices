@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using FootballServices.Domain.Models;
+using FootballServices.SqlDataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,25 +12,11 @@ namespace FootballServices.WebAPI.AutofacModule
     {
         protected override void Load(ContainerBuilder builder)
         {
-            //builder.RegisterType<PermissionsInterceptor>()
-            //       .SingleInstance()
-            //       .Named<IInterceptor>("Interceptors");
+            builder.RegisterGeneric(typeof(EFRepository<>))
+                   .As(typeof(IRepository<>))
+                   .InstancePerDependency();
 
-            //builder.RegisterWithInterceptor<AGVsService, IAGVsService>();
-            //builder.RegisterWithInterceptor<FleetService, IFleetService>();
-            //builder.RegisterWithInterceptor<EnvironmentService, IEnvironmentService>();
-            //builder.RegisterWithInterceptor<TreeService, ITreeService>();
-            //builder.RegisterWithInterceptor<SimulationService, ISimulationService>();
-            //builder.RegisterWithInterceptor<PayloadService, IPayloadService>();
-            //builder.RegisterWithInterceptor<ChargerService, IChargerService>();
-            //builder.RegisterWithInterceptor<ViewHelpersService, IViewHelpersService>();
-            //builder.RegisterWithInterceptor<UserService, IUserService>();
-            //builder.RegisterWithInterceptor<ViewRenderService, IViewRenderService>();
-            //builder.RegisterWithInterceptor<ProjectsService, IProjectsService>();
-
-            //builder.RegisterType<PermissionsService>().As<IPermissionsService>();
-
-            //builder.RegisterType<PermissionsCached>().As<IPermissionsCached>();
+            //builder.RegisterType<EFRepository<Manager>>().As<IRepository<Manager>>();
         }
     }
 }

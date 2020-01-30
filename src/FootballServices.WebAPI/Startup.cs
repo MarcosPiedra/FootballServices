@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Autofac;
+using AutoMapper;
 using FootballServices.BackgroundJob;
 using FootballServices.Configurations;
 using FootballServices.WebAPI.AutofacModule;
@@ -26,7 +27,7 @@ namespace FootballServices
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration configuration;
 
         public Startup(IWebHostEnvironment env)
         {
@@ -37,17 +38,18 @@ namespace FootballServices
 #endif
             .AddEnvironmentVariables();
 
-            this.Configuration = builder.Build();
+            this.configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connConfig = Configuration.GetSection("ConnectionStrings").Get<ConnectionConfiguration>();
-            var jobConfig = Configuration.GetSection("Job").Get<JobConfiguration>();
+            var connConfig = configuration.GetSection("ConnectionStrings").Get<ConnectionConfiguration>();
+            var jobConfig = configuration.GetSection("Job").Get<JobConfiguration>();
 
             services.AddMvc()
-                    .AddNewtonsoftJson()
-                    .AddAutoMapper();
+                    .AddNewtonsoftJson();
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
 
