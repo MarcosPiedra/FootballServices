@@ -46,7 +46,8 @@ namespace FootballServices
             var jobConfig = Configuration.GetSection("Job").Get<JobConfiguration>();
 
             services.AddMvc()
-                    .AddNewtonsoftJson();
+                    .AddNewtonsoftJson()
+                    .AddAutoMapper();
 
             services.AddControllers();
 
