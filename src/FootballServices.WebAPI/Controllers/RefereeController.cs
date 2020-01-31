@@ -14,91 +14,91 @@ namespace FootballServices.WebAPI.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[Controller]")]
-    public class PlayerController : Controller
+    public class RefereeController : Controller
     {
-        private readonly ILogger<PlayerController> logger;
-        private readonly IPlayerService playerService;
+        private readonly ILogger<RefereeController> logger;
+        private readonly IRefereeService refereeService;
         private readonly IMapper mapper;
 
-        public PlayerController(ILogger<PlayerController> logger,
-                                IPlayerService playerService,
-                                IMapper mapper)
+        public RefereeController(ILogger<RefereeController> logger,
+                                 IRefereeService refereeService,
+                                 IMapper mapper)
         {
             this.logger = logger;
-            this.playerService = playerService;
+            this.refereeService = refereeService;
             this.mapper = mapper;
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<PlayerResponse>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<List<PlayerResponse>>> GetAll()
+        [ProducesResponseType(typeof(List<RefereeResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<List<RefereeResponse>>> GetAll()
         {
-            var playerList = await this.playerService.GetAllAsync();
+            var refereeList = await this.refereeService.GetAllAsync();
 
-            if (playerList is null)
+            if (refereeList is null)
             {
                 return Ok();
             }
 
-            var playerResponseList = this.mapper.Map<List<Player>, List<PlayerResponse>>(playerList);
+            var refereeResponseList = this.mapper.Map<List<Referee>, List<RefereeResponse>>(refereeList);
 
-            return playerResponseList;
+            return refereeResponseList;
         }
 
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(PlayerResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(RefereeResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<PlayerResponse>> Get(int id)
+        public async Task<ActionResult<RefereeResponse>> Get(int id)
         {
-            var player = await this.playerService.FindAsync(id);
+            var referee = await this.refereeService.FindAsync(id);
 
-            if (player is null)
+            if (referee is null)
             {
                 return NotFound();
             }
 
-            var playerResponse = this.mapper.Map<Player, PlayerResponse>(player);
+            var refereeResponse = this.mapper.Map<Referee, RefereeResponse>(referee);
 
-            return playerResponse;
+            return refereeResponse;
         }
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<ActionResult> CreatePlayer([FromBody] PlayerRequest playerRequest)
+        public async Task<ActionResult> CreateReferee([FromBody] RefereeRequest refereeRequest)
         {
-            if (playerRequest is null)
+            if (refereeRequest is null)
             {
                 return BadRequest();
             }
 
-            var player = this.mapper.Map<PlayerRequest, Player>(playerRequest);
+            var referee = this.mapper.Map<RefereeRequest, Referee>(refereeRequest);
 
-            await this.playerService.AddAsync(player);
+            await this.refereeService.AddAsync(referee);
             
-            return CreatedAtAction(nameof(CreatePlayer), new { id = player.Id, version = this.HttpContext.GetRequestedApiVersion().ToString() }, player.Id);
+            return CreatedAtAction(nameof(CreateReferee), new { id = referee.Id, version = this.HttpContext.GetRequestedApiVersion().ToString() }, referee.Id);
         }
 
         [HttpPut("{id:int}")]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult> Updateplayer(int id, [FromBody] PlayerRequest playerRequest)
+        public async Task<ActionResult> UpdateReferee(int id, [FromBody] RefereeRequest refereeRequest)
         {
-            if (id < 1 || playerRequest is null)
+            if (id < 1 || refereeRequest is null)
             {
                 return BadRequest();
             }
 
-            var playerToUpdate = await this.playerService.FindAsync(id);
-            if (playerToUpdate is null)
+            var refereeToUpdate = await this.refereeService.FindAsync(id);
+            if (refereeToUpdate is null)
             {
                 return NotFound();
             }
 
-            var player = this.mapper.Map(playerRequest, playerToUpdate);
+            var referee = this.mapper.Map(refereeRequest, refereeToUpdate);
 
-            await this.playerService.UpdateAsync(player);
+            await this.refereeService.UpdateAsync(referee);
             
             return Ok();
         }
@@ -107,21 +107,21 @@ namespace FootballServices.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult> DeleteplayerByIdAsync(int id)
+        public async Task<ActionResult> DeleteRefereeByIdAsync(int id)
         {
             if (id < 1)
             {
                 return BadRequest();
             }
 
-            var playerToDelete = await this.playerService.FindAsync(id);
+            var refereeToDelete = await this.refereeService.FindAsync(id);
 
-            if (playerToDelete is null)
+            if (refereeToDelete is null)
             {
                 return NotFound();
             }
 
-            await this.playerService.RemoveAsync(playerToDelete);
+            await this.refereeService.RemoveAsync(refereeToDelete);
 
             return Ok();
         }

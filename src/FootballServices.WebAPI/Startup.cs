@@ -91,6 +91,7 @@ namespace FootballServices
             services.AddTransient<IRepository<Manager>, EFRepository<Manager>>();
             services.AddTransient<IRepository<Player>, EFRepository<Player>>();
             services.AddTransient<IRepository<Referee>, EFRepository<Referee>>();
+
             services.AddTransient<IManagerService, ManagerService>();
             services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<IRefereeService, RefereeService>();

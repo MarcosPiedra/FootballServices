@@ -17,6 +17,9 @@ namespace FootballServices.WebAPI
 
             CreateMap<Player, PlayerResponse>();
             CreateMap<PlayerRequest, Player>();
+
+            CreateMap<Referee, RefereeResponse>();
+            CreateMap<RefereeRequest, Referee>();
         }
     }
 }
