@@ -1,3 +1,4 @@
+using FootballServices.Domain.DTOs;
 using FootballServices.Domain.Models;
 using FootballServices.WebAPI.Tests.Unit;
 using Microsoft.AspNetCore.TestHost;
@@ -41,15 +42,56 @@ namespace FoorballServices.WebAPI.Tests.Unit
             var response = await client.GetAsync($"{ManagerMethods}/{id}");
             Assert.True(response.StatusCode == HttpStatusCode.NotFound);
         }
+
         [Fact]
         public async Task Post_manager_ok()
         {
-            var manager = new Manager() { Name = "Manager", TeamName = "Team Name 1", YellowCards = 1 };
+            var manager = new ManagerRequest() { Name = "Manager", TeamName = "Team Name 1", YellowCards = 1 };
             var server = await GetAPIAsync();
             var client = server.GetTestClient();
             var content = new StringContent(JsonConvert.SerializeObject(manager), Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"{ManagerMethods}", content);
             response.EnsureSuccessStatusCode();
         }
+
+        [Fact]
+        public async Task Delete_manager_not_content()
+        {
+            var manager = new ManagerRequest() { Name = "Manager", TeamName = "Team Name 1", YellowCards = 1 };
+            var server = await GetAPIAsync();
+            var client = server.GetTestClient();
+            var content = new StringContent(JsonConvert.SerializeObject(manager), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync($"{ManagerMethods}", content);
+            var idQuery = response.Headers.Location.Query.Replace("?id=", "");
+            if (int.TryParse(idQuery, out int id))
+            {
+                response = await server.GetTestClient().DeleteAsync($@"{ManagerMethods}\{id}");
+
+                Assert.True(response.StatusCode == HttpStatusCode.NoContent);
+            }
+            response.EnsureSuccessStatusCode();
+        }
+
+
+        [Fact]
+        public async Task Put_manager_not_content()
+        {
+            var manager = new ManagerRequest() { Name = "Manager", TeamName = "Team Name 1", YellowCards = 1 };
+            var server = await GetAPIAsync();
+            var client = server.GetTestClient();
+            var content = new StringContent(JsonConvert.SerializeObject(manager), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync($"{ManagerMethods}", content);
+            var idQuery = response.Headers.Location.Query.Replace("?id=", "");
+            if (int.TryParse(idQuery, out int id))
+            {
+                manager.TeamName = "Team Name 2";
+                content = new StringContent(JsonConvert.SerializeObject(manager), Encoding.UTF8, "application/json");
+                response = await server.GetTestClient().PutAsync($@"{ManagerMethods}\{id}", content);
+
+                Assert.True(response.StatusCode == HttpStatusCode.NoContent);
+            }
+            response.EnsureSuccessStatusCode();
+        }
     }
 }
+
