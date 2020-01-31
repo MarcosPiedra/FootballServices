@@ -55,6 +55,7 @@ namespace FootballServices
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
+            services.AddApiVersioning();
 
             services.AddDbContext<FootballServicesContext>((serviceProvider, optionsBuilder) =>
             {

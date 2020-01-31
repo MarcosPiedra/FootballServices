@@ -25,12 +25,11 @@ namespace FootballServices
                 logger.Debug("Init Main");
 
                 var host = Host.CreateDefaultBuilder(args)
-                               //.UseServiceProviderFactory(new AutofacServiceProviderFactory())
                                .ConfigureWebHostDefaults(webHostBuilder =>
                                {
                                    webHostBuilder.ConfigureLogging(logging => logging.ClearProviders())
                                                  .ConfigureServices(services => services.AddAutofac())
-                                                 .UseNLog()  // NLog: setup NLog for Dependency injection
+                                                 .UseNLog() 
                                                  .UseStartup<Startup>();
                                })
                                .Build();

@@ -12,8 +12,8 @@ using Microsoft.Extensions.Logging;
 
 namespace FootballServices.WebAPI.Controllers
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[Controller]")]
     public class ManagerController : Controller
     {
         private readonly ILogger<ManagerController> logger;
@@ -65,7 +65,7 @@ namespace FootballServices.WebAPI.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<ActionResult> CreateManagerAsync([FromBody] ManagerRequest managerRequest)
+        public async Task<ActionResult> CreateManager([FromBody] ManagerRequest managerRequest)
         {
             if (managerRequest is null)
             {
@@ -76,14 +76,14 @@ namespace FootballServices.WebAPI.Controllers
 
             await this.managerServices.AddAsync(manager);
 
-            return CreatedAtAction(nameof(CreateManagerAsync), new { id = manager.Id }, null);
+            return CreatedAtAction(nameof(CreateManager), new { id = manager.Id, version = this.HttpContext.GetRequestedApiVersion().ToString() }, null);
         }
 
         [HttpPut("{id:int}")]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<ActionResult> UpdateManagerAsync(int id, [FromBody] ManagerRequest managerRequest)
+        public async Task<ActionResult> UpdateManager(int id, [FromBody] ManagerRequest managerRequest)
         {
             if (id < 1 || managerRequest is null)
             {
@@ -100,7 +100,7 @@ namespace FootballServices.WebAPI.Controllers
 
             await this.managerServices.UpdateAsync(manager);
 
-            return CreatedAtAction(nameof(UpdateManagerAsync), new { id = manager.Id }, null);
+            return CreatedAtAction(nameof(UpdateManager), new { id = manager.Id }, null);
         }
 
         [HttpDelete("{id:int}")]

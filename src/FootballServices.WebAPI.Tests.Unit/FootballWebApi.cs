@@ -13,7 +13,7 @@ namespace FootballServices.WebAPI.Tests.Unit
 {
     public class FootballWebApi
     {
-        public async Task<IHost> CreateServerAsync()
+        public async Task<IHost> GetAPIAsync()
         {
             var path = Assembly.GetAssembly(typeof(FootballWebApi)).Location;
             var hostBuilder = new HostBuilder()
@@ -22,15 +22,6 @@ namespace FootballServices.WebAPI.Tests.Unit
                             webHost.UseTestServer();
                             webHost.UseStartup<Startup>();
                         });
-            //.ConfigureWebHost();
-            //.UseContentRoot(Path.GetDirectoryName(path))
-            //.ConfigureAppConfiguration(cb =>
-            //{
-            //    cb.AddJsonFile("appsettings.json", optional: false)
-            //      .AddEnvironmentVariables();
-            //})
-            //.CaptureStartupErrors(true)
-            //.UseStartup<Startup>();
             
             return await hostBuilder.StartAsync();
         }

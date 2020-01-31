@@ -12,7 +12,8 @@ namespace FootballServices.WebAPI
     {
         public Automapping()
         {
-            CreateMap<Manager, ManagerResponse>(); 
+            CreateMap<Manager, ManagerResponse>();
+            CreateMap<ManagerRequest, Manager>();
         }
     }
 }
