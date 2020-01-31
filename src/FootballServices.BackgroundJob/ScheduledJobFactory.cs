@@ -20,8 +20,7 @@ namespace FootballServices.BackgroundJob
 
         public void ReturnJob(IJob job)
         {
-            IDisposable disposable = job as IDisposable;
-            if (disposable != null)
+            if (job is IDisposable disposable)
             {
                 disposable.Dispose();
             }

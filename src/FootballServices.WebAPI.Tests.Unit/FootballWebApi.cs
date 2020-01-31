@@ -21,6 +21,7 @@ namespace FootballServices.WebAPI.Tests.Unit
                         {
                             webHost.UseTestServer();
                             webHost.UseStartup<Startup>();
+                            webHost.UseEnvironment("Test");
                         });
             
             return await hostBuilder.StartAsync();

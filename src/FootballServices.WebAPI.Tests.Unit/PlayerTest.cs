@@ -12,18 +12,18 @@ using Xunit;
 
 namespace FoorballServices.WebAPI.Tests.Unit
 {
-    public class ManagerTest : FootballWebApi
+    public class PlayerrTest : FootballWebApi
     {
-        private static string ManagerMethods => "api/v1/Manager";
-        private ManagerRequest GetToSend() => new ManagerRequest() { Name = "Manager", TeamName = "Team Name 1", YellowCards = 1 };
-        private void ChangeToSend(ManagerRequest m) => m.TeamName = "Team name X";
+        private static string PlayerMethods => "api/v1/Player";
+        private PlayerRequest GetToSend() => new PlayerRequest() { Name = "Player", TeamName = "Team Name 1", YellowCards = 1, MinutesPlayed = 5, Number = 10, RedCards = 1 };
+        private void ChangeToSend(PlayerRequest m) => m.TeamName = "Team name X";
 
         [Fact]
         public async Task Get_all_return_ok()
         {
             var server = await GetAPIAsync();
             var client = server.GetTestClient();
-            var response = await client.GetAsync($"{ManagerMethods}");
+            var response = await client.GetAsync($"{PlayerMethods}");
             response.EnsureSuccessStatusCode();
         }
         [Fact]
@@ -32,7 +32,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
             var id = 1;
             var server = await GetAPIAsync();
             var client = server.GetTestClient();
-            var response = await client.GetAsync($"{ManagerMethods}/{id}");
+            var response = await client.GetAsync($"{PlayerMethods}/{id}");
             response.EnsureSuccessStatusCode();
         }
         [Fact]
@@ -41,7 +41,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
             var id = int.MaxValue;
             var server = await GetAPIAsync();
             var client = server.GetTestClient();
-            var response = await client.GetAsync($"{ManagerMethods}/{id}");
+            var response = await client.GetAsync($"{PlayerMethods}/{id}");
             Assert.True(response.StatusCode == HttpStatusCode.NotFound);
         }
 
@@ -52,7 +52,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
             var server = await GetAPIAsync();
             var client = server.GetTestClient();
             var content = new StringContent(JsonConvert.SerializeObject(toSend), Encoding.UTF8, "application/json");
-            var response = await client.PostAsync($"{ManagerMethods}", content);
+            var response = await client.PostAsync($"{PlayerMethods}", content);
             response.EnsureSuccessStatusCode();
         }
 
@@ -63,11 +63,11 @@ namespace FoorballServices.WebAPI.Tests.Unit
             var server = await GetAPIAsync();
             var client = server.GetTestClient();
             var content = new StringContent(JsonConvert.SerializeObject(toSend), Encoding.UTF8, "application/json");
-            var response = await client.PostAsync($"{ManagerMethods}", content);
+            var response = await client.PostAsync($"{PlayerMethods}", content);
             var idQuery = response.Headers.Location.Query.Replace("?id=", "");
             if (int.TryParse(idQuery, out int id))
             {
-                response = await server.GetTestClient().DeleteAsync($@"{ManagerMethods}\{id}");
+                response = await server.GetTestClient().DeleteAsync($@"{PlayerMethods}\{id}");
 
                 Assert.True(response.StatusCode == HttpStatusCode.OK);
             }
@@ -82,13 +82,13 @@ namespace FoorballServices.WebAPI.Tests.Unit
             var server = await GetAPIAsync();
             var client = server.GetTestClient();
             var content = new StringContent(JsonConvert.SerializeObject(toSend), Encoding.UTF8, "application/json");
-            var response = await client.PostAsync($"{ManagerMethods}", content);
+            var response = await client.PostAsync($"{PlayerMethods}", content);
             var idQuery = response.Headers.Location.Query.Replace("?id=", "");
             if (int.TryParse(idQuery, out int id))
             {
                 ChangeToSend(toSend);
                 content = new StringContent(JsonConvert.SerializeObject(toSend), Encoding.UTF8, "application/json");
-                response = await server.GetTestClient().PutAsync($@"{ManagerMethods}\{id}", content);
+                response = await server.GetTestClient().PutAsync($@"{PlayerMethods}\{id}", content);
 
                 Assert.True(response.StatusCode == HttpStatusCode.OK);
             }

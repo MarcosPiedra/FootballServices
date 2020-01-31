@@ -16,12 +16,16 @@ namespace FoorballServices.SqlDataAccess
         }
 
         public DbSet<Manager> Managers { get; set; }
+        public DbSet<Player> Player { get; set; }
+        public DbSet<Referee> Referee { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new ManagerConfig());
+            modelBuilder.ApplyConfiguration(new PlayerConfig());
+            modelBuilder.ApplyConfiguration(new RefereeConfig());
         }
     }
 }

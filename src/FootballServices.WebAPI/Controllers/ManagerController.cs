@@ -75,14 +75,14 @@ namespace FootballServices.WebAPI.Controllers
             var manager = this.mapper.Map<ManagerRequest, Manager>(managerRequest);
 
             await this.managerServices.AddAsync(manager);
-
-            return CreatedAtAction(nameof(CreateManager), new { id = manager.Id, version = this.HttpContext.GetRequestedApiVersion().ToString() }, null);
+            
+            return CreatedAtAction(nameof(CreateManager), new { id = manager.Id, version = this.HttpContext.GetRequestedApiVersion().ToString() }, manager.Id);
         }
 
         [HttpPut("{id:int}")]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult> UpdateManager(int id, [FromBody] ManagerRequest managerRequest)
         {
             if (id < 1 || managerRequest is null)
@@ -99,14 +99,14 @@ namespace FootballServices.WebAPI.Controllers
             var manager = this.mapper.Map(managerRequest, managerToUpdate);
 
             await this.managerServices.UpdateAsync(manager);
-
-            return CreatedAtAction(nameof(UpdateManager), new { id = manager.Id }, null);
+            
+            return Ok();
         }
 
         [HttpDelete("{id:int}")]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult> DeleteManagerByIdAsync(int id)
         {
             if (id < 1)
@@ -123,8 +123,7 @@ namespace FootballServices.WebAPI.Controllers
 
             await this.managerServices.RemoveAsync(managerToDelete);
 
-            return NoContent();
+            return Ok();
         }
-
     }
 }

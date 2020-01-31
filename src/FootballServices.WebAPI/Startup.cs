@@ -4,11 +4,9 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Autofac;
 using AutoMapper;
 using FootballServices.BackgroundJob;
 using FootballServices.Configurations;
-using FootballServices.WebAPI.AutofacModule;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -39,7 +37,7 @@ namespace FootballServices
 #if DEBUG
                          .AddJsonFile($"appsettings.Debug.json", optional: true, reloadOnChange: true)
 #endif
-            .AddEnvironmentVariables();
+                         .AddEnvironmentVariables();
 
             this.configuration = builder.Build();
         }
@@ -76,14 +74,13 @@ namespace FootballServices
                                      .WithIdentity($"Match.trigger", "group1")
                                      .StartNow()
                                      .WithSimpleSchedule(s =>
-                                         s.WithInterval(TimeSpan.FromSeconds(5))
+                                         s.WithInterval(TimeSpan.FromSeconds(30))
                                           .RepeatForever())
                                      .Build();
             });
-
             services.AddSingleton(provider =>
             {
-                var prop = new NameValueCollection { { "quartz.threadPool.threadCount", jobConfig.SimultaneousJobs.ToString() } };
+                var prop = new NameValueCollection { { "quartz.threadPool.threadCount", "1" } };
                 var schedulerFactory = new StdSchedulerFactory(prop);
                 var scheduler = schedulerFactory.GetScheduler().Result;
                 scheduler.JobFactory = provider.GetService<IJobFactory>();
@@ -92,18 +89,16 @@ namespace FootballServices
             });
 
             services.AddTransient<IRepository<Manager>, EFRepository<Manager>>();
+            services.AddTransient<IRepository<Player>, EFRepository<Player>>();
+            services.AddTransient<IRepository<Referee>, EFRepository<Referee>>();
             services.AddTransient<IManagerService, ManagerService>();
+            services.AddTransient<IPlayerService, PlayerService>();
+            services.AddTransient<IRefereeService, RefereeService>();
         }
-
-        //public void ConfigureContainer(ContainerBuilder builder)
-        //{
-        //    builder.RegisterModule(new Services());
-        //}
 
         public void Configure(IApplicationBuilder app,
                               IWebHostEnvironment env,
-                              ILogger<Startup> logger,
-                              IScheduler scheduler)
+                              ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
@@ -139,7 +134,13 @@ namespace FootballServices
             app.UseRouting();
             app.UseEndpoints(e => e.MapControllers());
 
-            scheduler.ScheduleJob(app.ApplicationServices.GetService<IJobDetail>(), app.ApplicationServices.GetService<ITrigger>());
+            if (!env.IsEnvironment("Test"))
+            {
+                var jobDetail = app.ApplicationServices.GetService<IJobDetail>();
+                var trigger = app.ApplicationServices.GetService<ITrigger>();
+                var scheduler = app.ApplicationServices.GetService<IScheduler>();
+                scheduler.ScheduleJob(jobDetail, trigger);
+            }
         }
     }
 }
