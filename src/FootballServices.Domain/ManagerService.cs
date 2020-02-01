@@ -26,7 +26,7 @@ namespace FootballServices.Domain
             await repository.AddAsync(manager);
             await repository.SaveAsync();
 
-            await this.statisticsService.UpdateAsync(StatisticsType.MinutesPlayedByAllManagers, manager);
+            await this.statisticsService.UpdateAsync(manager);
         }
 
         public async Task<Manager> FindAsync(int id) => await repository.FindAsync(id);
@@ -46,7 +46,7 @@ namespace FootballServices.Domain
             repository.Update(manager);
             await repository.SaveAsync();
 
-            await this.statisticsService.UpdateAsync(StatisticsType.MinutesPlayedByAllManagers, manager, oldManager);
+            await this.statisticsService.UpdateAsync(manager, oldManager);
         }
     }
 }

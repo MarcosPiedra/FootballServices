@@ -29,7 +29,7 @@ namespace FootballServices.WebAPI.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("yellowcards")]
         [ProducesResponseType(typeof(List<RefereeResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<List<CardResponse>>> GetYellowCards()
         {
@@ -45,6 +45,37 @@ namespace FootballServices.WebAPI.Controllers
             return stReponseList;
         }
 
+        [HttpGet("redcards")]
+        [ProducesResponseType(typeof(List<RefereeResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<List<CardResponse>>> GetRedCards()
+        {
+            var stList = await this.statisticsService.GetAsync(StatisticsType.RedCardsByTeam);
 
+            if (stList == null)
+            {
+                return Ok();
+            }
+
+            var stReponseList = this.mapper.Map<List<Statistic>, List<CardResponse>>(stList);
+
+            return stReponseList;
+        }
+
+        [HttpGet("minutes")]
+        [ProducesResponseType(typeof(List<RefereeResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<List<MinuteResponse>>> GetMinutes()
+        {
+            var minutes = await this.statisticsService.GetAsync(StatisticsType.MinutesPlayedByAllReferee);
+            minutes = minutes.Concat(await this.statisticsService.GetAsync(StatisticsType.MinutesPlayedByAllPlayers)).ToList();
+
+            if (minutes == null)
+            {
+                return Ok();
+            }
+
+            var stReponseList = this.mapper.Map<List<Statistic>, List<MinuteResponse>>(minutes);
+
+            return stReponseList;
+        }
     }
 }

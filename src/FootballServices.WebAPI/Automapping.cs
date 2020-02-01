@@ -32,7 +32,7 @@ namespace FootballServices.WebAPI
 
             CreateMap<Statistic, CardResponse>()
                    .ForMember(d => d.Name, o => o.MapFrom(s => s.Type.ToString()));
-            CreateMap<Statistic, MinutesResponse>()
+            CreateMap<Statistic, MinuteResponse>()
                    .ForMember(d => d.Name, o => o.MapFrom(s => s.Type.ToString()));
         }
     }

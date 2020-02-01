@@ -74,7 +74,7 @@ namespace FootballServices
                                      .WithIdentity($"Match.trigger", "group1")
                                      .StartNow()
                                      .WithSimpleSchedule(s =>
-                                         s.WithInterval(TimeSpan.FromSeconds(30))
+                                         s.WithInterval(TimeSpan.FromSeconds(jobConfig.PeriodBetweenExecution))
                                           .RepeatForever())
                                      .Build();
             });

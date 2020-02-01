@@ -31,58 +31,78 @@ namespace FootballServices.Domain
                                               .ToListAsync();
         }
 
-        public async Task UpdateAsync<T>(StatisticsType common, T newValues, T oldValues = null) where T : class
+        public async Task UpdateAsync<T>(T newValues, T oldValues = null) where T : class
         {
-            StatisticsParams stOldValues = new StatisticsParams();
-            StatisticsParams stNewValues = null;
+            CreateParams(newValues, oldValues, out StatisticsParams stNewValues, out StatisticsParams stOldValues);
+
+            if (string.IsNullOrEmpty(stNewValues.Team))
+                await UpdateCardsAsync(stNewValues, stOldValues);
+        }
+
+        public async Task UpdateAsync<T>(StatisticsType source, T newValues, T oldValues = null) where T : class
+        {
+            CreateParams(newValues, oldValues, out StatisticsParams stNewValues, out StatisticsParams stOldValues);
+
+            if (string.IsNullOrEmpty(stNewValues.Team))
+                await UpdateCardsAsync(stNewValues, stOldValues);
+
+            await UpdateMinutesAsync(source, stNewValues, stOldValues);
+        }
+
+        private void CreateParams<T>(T newValues,
+                                     T oldValues,
+                                     out StatisticsParams stNewValues,
+                                     out StatisticsParams stOldValues) where T : class
+        {
+            stNewValues = new StatisticsParams();
+            stOldValues = new StatisticsParams();
 
             switch (newValues)
             {
                 case Manager m:
                     stNewValues = CreateStatisticsParams(m);
                     if (oldValues != null)
-                        stOldValues = CreateStatisticsParams(m);
+                        stOldValues = CreateStatisticsParams(oldValues as Manager);
 
                     break;
                 case Player p:
                     stNewValues = CreateStatisticsParams(p);
                     if (oldValues != null)
-                        stOldValues = CreateStatisticsParams(p);
+                        stOldValues = CreateStatisticsParams(oldValues as Player);
 
                     break;
                 case Referee r:
                     stNewValues = CreateStatisticsParams(r);
                     if (oldValues != null)
-                        stOldValues = CreateStatisticsParams(r);
+                        stOldValues = CreateStatisticsParams(oldValues as Referee);
 
                     break;
                 default:
-                    throw new Exception("");
+                    throw new Exception("Canno't convert the type of statistic");
             }
-
-            await UpdateAsync(common, stNewValues, stOldValues);
         }
 
-        private async Task UpdateAsync(StatisticsType common,
-                                       StatisticsParams newValues,
-                                       StatisticsParams oldValues)
+        private async Task UpdateCardsAsync(StatisticsParams newValues, StatisticsParams oldValues)
         {
             if (oldValues == null)
                 oldValues = new StatisticsParams();
 
             var redCards = Math.Max(newValues.RedCards - oldValues.RedCards, 0);
             var yellowCards = Math.Max(newValues.YellowCards - oldValues.YellowCards, 0);
+            var team = newValues.Team;
+
+            await this.UpdateAsync(StatisticsType.RedCardsByTeam, redCards, team);
+            await this.UpdateAsync(StatisticsType.YellowCardsByTeam, yellowCards, team);
+        }
+
+        private async Task UpdateMinutesAsync(StatisticsType common, StatisticsParams newValues, StatisticsParams oldValues)
+        {
+            if (oldValues == null)
+                oldValues = new StatisticsParams();
+
             var minutes = Math.Max(newValues.Minutes - oldValues.Minutes, 0);
 
-            var team = oldValues.Team;
-
-            if (!string.IsNullOrEmpty(team))
-            {
-                await this.UpdateAsync(StatisticsType.RedCardsByTeam, redCards, team);
-                await this.UpdateAsync(StatisticsType.YellowCardsByTeam, yellowCards, team);
-            }
-
-            await this.UpdateAsync(common, minutes, team);
+            await UpdateAsync(common, minutes, "");
         }
 
         private async Task UpdateAsync(StatisticsType type, int valueToAdd, string team = "")
@@ -97,10 +117,12 @@ namespace FootballServices.Domain
                 st.Type = type;
                 st.TeamName = team;
                 await this.repository.AddAsync(st);
+                await this.repository.SaveAsync();
             }
 
             st.Total += valueToAdd;
             this.repository.Update(st);
+            await this.repository.SaveAsync();
         }
         private StatisticsParams CreateStatisticsParams(Player player)
         {
@@ -128,6 +150,5 @@ namespace FootballServices.Domain
                 Minutes = referee.MinutesPlayed,
             };
         }
-
     }
 }

@@ -9,8 +9,7 @@ namespace FootballServices.Domain.Models
         YellowCardsByTeam = 0,
         RedCardsByTeam = 1,
         MinutesPlayedByAllReferee = 2,
-        MinutesPlayedByAllPlayers = 3,
-        MinutesPlayedByAllManagers = 4,
+        MinutesPlayedByAllPlayers = 3
     }
 
     public class Statistic

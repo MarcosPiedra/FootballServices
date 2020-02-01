@@ -6,6 +6,6 @@ namespace FootballServices.Configurations
 {
     public class JobConfiguration
     {
-        public string SimultaneousJobs { get; set; }
+        public int PeriodBetweenExecution { get; set; }
     }
 }
