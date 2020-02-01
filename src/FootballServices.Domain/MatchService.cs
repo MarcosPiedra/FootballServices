@@ -133,6 +133,15 @@ namespace FootballServices.Domain
                 match.Status = MatchStatus.NoPlayed;
             }
         }
+
+        public async Task UpdateStatusAsync()
+        {
+            foreach (var m in repoMatches.Query)
+            {
+                UpdateStatus(m);
+            }
+            await repoMatches.SaveAsync();
+        }
     }
 
     class PlayersMatchRelated

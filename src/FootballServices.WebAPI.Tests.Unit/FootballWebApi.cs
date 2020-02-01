@@ -18,8 +18,6 @@ namespace FootballServices.WebAPI.Tests.Unit
     {
         public async Task<IHost> GetServer()
         {
-            var dbName = Guid.NewGuid();
-
             var path = Assembly.GetAssembly(typeof(FootballWebApi)).Location;
             var hostBuilder = new HostBuilder()
                         .ConfigureWebHost(webHost =>
@@ -28,7 +26,6 @@ namespace FootballServices.WebAPI.Tests.Unit
                             webHost.UseStartup<Startup>();
                             webHost.UseEnvironment("Test");
                         });
-
 
             return await hostBuilder.StartAsync();
         }
