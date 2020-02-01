@@ -23,12 +23,14 @@ using FoorballServices.SqlDataAccess;
 using FootballServices.Domain.Models;
 using FootballServices.SqlDataAccess;
 using FootballServices.Domain;
+using System.IO;
 
 namespace FootballServices
 {
     public class Startup
     {
-        private readonly IConfiguration configuration;
+        public readonly IConfiguration configuration;
+        private readonly bool isTest = false;
 
         public Startup(IWebHostEnvironment env)
         {
@@ -40,12 +42,20 @@ namespace FootballServices
                          .AddEnvironmentVariables();
 
             this.configuration = builder.Build();
+
+            isTest = env.IsEnvironment("Test");
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             var connConfig = configuration.GetSection("ConnectionStrings").Get<ConnectionConfiguration>();
             var jobConfig = configuration.GetSection("Job").Get<JobConfiguration>();
+            if (isTest)
+            {
+                var guid = Guid.NewGuid().ToString();
+                File.Copy("football.db", $"{guid}.db");
+                connConfig.DatabaseConnection = $"Data Source={guid}.db";
+            }
 
             services.AddMvc()
                     .AddNewtonsoftJson();

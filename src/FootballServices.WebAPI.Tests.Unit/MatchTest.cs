@@ -41,7 +41,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
         [Fact]
         public async Task Get_all_return_ok()
         {
-            var server = await GetAPIAsync();
+            var server = await GetServer();
             var client = server.GetTestClient();
             var response = await client.GetAsync($"{MatchMethods}");
             response.EnsureSuccessStatusCode();
@@ -50,7 +50,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
         public async Task Get_by_id_return_ok()
         {
             var id = 1;
-            var server = await GetAPIAsync();
+            var server = await GetServer();
             var client = server.GetTestClient();
             var response = await client.GetAsync($"{MatchMethods}/{id}");
             response.EnsureSuccessStatusCode();
@@ -59,7 +59,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
         public async Task Get_by_id_return_not_found()
         {
             var id = int.MaxValue;
-            var server = await GetAPIAsync();
+            var server = await GetServer();
             var client = server.GetTestClient();
             var response = await client.GetAsync($"{MatchMethods}/{id}");
             Assert.True(response.StatusCode == HttpStatusCode.NotFound);
@@ -68,7 +68,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
         public async Task Post_return_ok()
         {
             var toSend = GetToSend();
-            var server = await GetAPIAsync();
+            var server = await GetServer();
             var client = server.GetTestClient();
             var content = new StringContent(JsonConvert.SerializeObject(toSend), Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"{MatchMethods}", content);
@@ -78,7 +78,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
         public async Task Delete_return_ok()
         {
             var toSend = GetToSend();
-            var server = await GetAPIAsync();
+            var server = await GetServer();
             var client = server.GetTestClient();
             var content = new StringContent(JsonConvert.SerializeObject(toSend), Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"{MatchMethods}", content);
@@ -95,7 +95,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
         public async Task Put_manager_ok()
         {
             var toSend = GetToSend();
-            var server = await GetAPIAsync();
+            var server = await GetServer();
             var client = server.GetTestClient();
             var content = new StringContent(JsonConvert.SerializeObject(toSend), Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"{MatchMethods}", content);

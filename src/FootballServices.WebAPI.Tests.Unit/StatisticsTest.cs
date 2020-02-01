@@ -39,7 +39,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
         public async Task Statistics_cards_ok()
         {
             dic.Clear();
-            var server = await GetAPIAsync();
+            var server = await GetServer();
             var client = server.GetTestClient();
 
             await CreateTeam(server, client, "team1");
@@ -72,7 +72,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
             dic.Clear();
             totalMinutesByReferee = 0;
 
-            var server = await GetAPIAsync();
+            var server = await GetServer();
             var client = server.GetTestClient();
 
             await CreateTeam(server, client, "team1");
