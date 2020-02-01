@@ -122,6 +122,29 @@ namespace FootballServices.WebAPI.Controllers
             return Ok();
         }
 
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult> DeleteMatchByIdAsync(int id)
+        {
+            if (id < 1)
+            {
+                return BadRequest();
+            }
+
+            var matchToDelete = await this.matchService.FindAsync(id);
+
+            if (matchToDelete == null)
+            {
+                return NotFound();
+            }
+
+            await this.matchService.RemoveAsync(matchToDelete);
+
+            return Ok();
+        }
+
         private async Task<bool> ThereAreNotFoundAsync(MatchRequest matchRequest)
         {
             foreach (var p in matchRequest.AwayTeam)

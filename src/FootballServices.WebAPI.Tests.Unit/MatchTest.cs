@@ -75,6 +75,23 @@ namespace FoorballServices.WebAPI.Tests.Unit
             response.EnsureSuccessStatusCode();
         }
         [Fact]
+        public async Task Delete_return_ok()
+        {
+            var toSend = GetToSend();
+            var server = await GetAPIAsync();
+            var client = server.GetTestClient();
+            var content = new StringContent(JsonConvert.SerializeObject(toSend), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync($"{MatchMethods}", content);
+            var idQuery = response.Headers.Location.Query.Replace("?id=", "");
+            if (int.TryParse(idQuery, out int id))
+            {
+                response = await server.GetTestClient().DeleteAsync($@"{MatchMethods}\{id}");
+
+                Assert.True(response.StatusCode == HttpStatusCode.OK);
+            }
+            response.EnsureSuccessStatusCode();
+        }
+        [Fact]
         public async Task Put_manager_ok()
         {
             var toSend = GetToSend();

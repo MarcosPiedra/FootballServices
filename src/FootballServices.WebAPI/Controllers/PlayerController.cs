@@ -107,7 +107,7 @@ namespace FootballServices.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult> DeleteplayerByIdAsync(int id)
+        public async Task<ActionResult> DeletePlayerByIdAsync(int id)
         {
             if (id < 1)
             {
