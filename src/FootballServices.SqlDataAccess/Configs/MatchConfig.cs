@@ -15,7 +15,21 @@ namespace FootballServices.SqlDataAccess.Configs
 
             builder.Property(m => m.Id).HasColumnName("Id");
             builder.Property(m => m.Name).HasColumnName("Name");
-            builder.Property(m => m.MinutesPlayed).HasColumnName("MinutesPlayed");
+            builder.Property(m => m.HouseTeamPlayersIds).HasColumnName("HouseTeamPlayersIds");
+            builder.Property(m => m.AwayTeamPlayersIds).HasColumnName("AwayTeamPlayersIds");
+            builder.Property(m => m.HouseTeamManagerId).HasColumnName("HouseTeamManagerId");
+            builder.Property(m => m.AwayTeamManagerId).HasColumnName("AwayTeamManagerId");
+            builder.Property(m => m.RefereeId).HasColumnName("RefereeId");
+            builder.Property(m => m.Date).HasColumnName("Date")
+                                         .HasConversion<string>();
+            builder.Property(m => m.Status).HasColumnName("Status")
+                                           .HasConversion<int>();
+
+            builder.Ignore(m => m.HouseTeamPlayers);
+            builder.Ignore(m => m.AwayTeamPlayers);
+            builder.Ignore(m => m.HouseTeamManager);
+            builder.Ignore(m => m.AwayTeamManager);
+            builder.Ignore(m => m.Referee);
 
             builder.HasKey(a => a.Id);
         }

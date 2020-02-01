@@ -35,7 +35,7 @@ namespace FootballServices.WebAPI.Controllers
         {
             var managerList = await this.managerServices.GetAllAsync();
 
-            if (managerList is null)
+            if (managerList == null)
             {
                 return Ok();
             }
@@ -52,7 +52,7 @@ namespace FootballServices.WebAPI.Controllers
         {
             var manager = await this.managerServices.FindAsync(id);
 
-            if (manager is null)
+            if (manager == null)
             {
                 return NotFound();
             }
@@ -67,7 +67,7 @@ namespace FootballServices.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<ActionResult> CreateManager([FromBody] ManagerRequest managerRequest)
         {
-            if (managerRequest is null)
+            if (managerRequest == null)
             {
                 return BadRequest();
             }
@@ -85,13 +85,13 @@ namespace FootballServices.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult> UpdateManager(int id, [FromBody] ManagerRequest managerRequest)
         {
-            if (id < 1 || managerRequest is null)
+            if (id < 1 || managerRequest == null)
             {
                 return BadRequest();
             }
 
             var managerToUpdate = await this.managerServices.FindAsync(id);
-            if (managerToUpdate is null)
+            if (managerToUpdate == null)
             {
                 return NotFound();
             }
@@ -116,7 +116,7 @@ namespace FootballServices.WebAPI.Controllers
 
             var managerToDelete = await this.managerServices.FindAsync(id);
 
-            if (managerToDelete is null)
+            if (managerToDelete == null)
             {
                 return NotFound();
             }

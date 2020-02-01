@@ -16,8 +16,9 @@ namespace FoorballServices.SqlDataAccess
         }
 
         public DbSet<Manager> Managers { get; set; }
-        public DbSet<Player> Player { get; set; }
-        public DbSet<Referee> Referee { get; set; }
+        public DbSet<Player> Players { get; set; }
+        public DbSet<Referee> Referees { get; set; }
+        public DbSet<Match> Matches { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +27,7 @@ namespace FoorballServices.SqlDataAccess
             modelBuilder.ApplyConfiguration(new ManagerConfig());
             modelBuilder.ApplyConfiguration(new PlayerConfig());
             modelBuilder.ApplyConfiguration(new RefereeConfig());
+            modelBuilder.ApplyConfiguration(new MatchConfig());
         }
     }
 }

@@ -20,6 +20,15 @@ namespace FootballServices.WebAPI
 
             CreateMap<Referee, RefereeResponse>();
             CreateMap<RefereeRequest, Referee>();
+
+            CreateMap<Match, MatchResponse>();
+            CreateMap<MatchRequest, Match>()
+                   .ForMember(d => d.Referee, o => o.Ignore())
+                   .ForMember(d => d.RefereeId, o => o.MapFrom(s => s.Referee))
+                   .ForMember(d => d.AwayTeamPlayersIds, o => o.MapFrom(s => $"[{string.Join(',', s.AwayTeam)}]"))
+                   .ForMember(d => d.AwayTeamManagerId, o => o.MapFrom(s => s.AwayManager))
+                   .ForMember(d => d.HouseTeamPlayersIds, o => o.MapFrom(s => $"[{string.Join(',', s.HouseTeam)}]"))
+                   .ForMember(d => d.HouseTeamManagerId, o => o.MapFrom(s => s.AwayManager));
         }
     }
 }

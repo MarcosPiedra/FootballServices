@@ -35,7 +35,7 @@ namespace FootballServices.WebAPI.Controllers
         {
             var playerList = await this.playerService.GetAllAsync();
 
-            if (playerList is null)
+            if (playerList == null)
             {
                 return Ok();
             }
@@ -52,7 +52,7 @@ namespace FootballServices.WebAPI.Controllers
         {
             var player = await this.playerService.FindAsync(id);
 
-            if (player is null)
+            if (player == null)
             {
                 return NotFound();
             }
@@ -67,7 +67,7 @@ namespace FootballServices.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<ActionResult> CreatePlayer([FromBody] PlayerRequest playerRequest)
         {
-            if (playerRequest is null)
+            if (playerRequest == null)
             {
                 return BadRequest();
             }
@@ -83,15 +83,15 @@ namespace FootballServices.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult> Updateplayer(int id, [FromBody] PlayerRequest playerRequest)
+        public async Task<ActionResult> UpdatePlayer(int id, [FromBody] PlayerRequest playerRequest)
         {
-            if (id < 1 || playerRequest is null)
+            if (id < 1 || playerRequest == null)
             {
                 return BadRequest();
             }
 
             var playerToUpdate = await this.playerService.FindAsync(id);
-            if (playerToUpdate is null)
+            if (playerToUpdate == null)
             {
                 return NotFound();
             }
@@ -116,7 +116,7 @@ namespace FootballServices.WebAPI.Controllers
 
             var playerToDelete = await this.playerService.FindAsync(id);
 
-            if (playerToDelete is null)
+            if (playerToDelete == null)
             {
                 return NotFound();
             }

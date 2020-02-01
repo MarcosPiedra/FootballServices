@@ -13,7 +13,7 @@ namespace FootballServices.SqlDataAccess.Configs
         {
             builder.ToTable("Players");
 
-            builder.Property(m => m.Id).HasColumnName("Id");
+            builder.Property(m => m.Id).HasColumnName("id");
             builder.Property(m => m.Name).HasColumnName("Name");
             builder.Property(m => m.Number).HasColumnName("Number");
             builder.Property(m => m.TeamName).HasColumnName("TeamName");

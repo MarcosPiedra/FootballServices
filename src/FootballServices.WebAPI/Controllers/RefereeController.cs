@@ -35,7 +35,7 @@ namespace FootballServices.WebAPI.Controllers
         {
             var refereeList = await this.refereeService.GetAllAsync();
 
-            if (refereeList is null)
+            if (refereeList == null)
             {
                 return Ok();
             }
@@ -52,7 +52,7 @@ namespace FootballServices.WebAPI.Controllers
         {
             var referee = await this.refereeService.FindAsync(id);
 
-            if (referee is null)
+            if (referee == null)
             {
                 return NotFound();
             }
@@ -67,7 +67,7 @@ namespace FootballServices.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<ActionResult> CreateReferee([FromBody] RefereeRequest refereeRequest)
         {
-            if (refereeRequest is null)
+            if (refereeRequest == null)
             {
                 return BadRequest();
             }
@@ -85,13 +85,13 @@ namespace FootballServices.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult> UpdateReferee(int id, [FromBody] RefereeRequest refereeRequest)
         {
-            if (id < 1 || refereeRequest is null)
+            if (id < 1 || refereeRequest == null)
             {
                 return BadRequest();
             }
 
             var refereeToUpdate = await this.refereeService.FindAsync(id);
-            if (refereeToUpdate is null)
+            if (refereeToUpdate == null)
             {
                 return NotFound();
             }
@@ -116,7 +116,7 @@ namespace FootballServices.WebAPI.Controllers
 
             var refereeToDelete = await this.refereeService.FindAsync(id);
 
-            if (refereeToDelete is null)
+            if (refereeToDelete == null)
             {
                 return NotFound();
             }
