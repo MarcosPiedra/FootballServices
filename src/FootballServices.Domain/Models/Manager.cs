@@ -10,5 +10,6 @@ namespace FootballServices.Domain.Models
         public string Name { get; set; }
         public string TeamName { get; set; }
         public int YellowCards { get; set; }
+        public int RedCards { get; set; }
     }
 }

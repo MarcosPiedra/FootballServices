@@ -12,16 +12,21 @@ namespace FootballServices.Domain
     public class PlayerService : IPlayerService
     {
         private readonly IRepository<Player> repository;
+        private readonly IStatisticsService statisticsService;
 
-        public PlayerService(IRepository<Player> repository)
+        public PlayerService(IRepository<Player> repository,
+                             IStatisticsService statisticsService)
         {
             this.repository = repository;
+            this.statisticsService = statisticsService;
         }
 
         public async Task AddAsync(Player player)
         {
             await repository.AddAsync(player);
             await repository.SaveAsync();
+
+            await this.statisticsService.UpdateAsync(StatisticsType.MinutesPlayedByAllPlayers, player);
         }
 
         public async Task<Player> FindAsync(int id) => await repository.FindAsync(id);
@@ -36,8 +41,12 @@ namespace FootballServices.Domain
 
         public async Task UpdateAsync(Player player)
         {
+            var oldPlayer = repository.Query.FirstOrDefault(p => p.Id == player.Id);
+
             repository.Update(player);
             await repository.SaveAsync();
+
+            await this.statisticsService.UpdateAsync(StatisticsType.MinutesPlayedByAllPlayers, player, oldPlayer);
         }
     }
 }

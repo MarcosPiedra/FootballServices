@@ -12,16 +12,21 @@ namespace FootballServices.Domain
     public class ManagerService : IManagerService
     {
         private readonly IRepository<Manager> repository;
+        private readonly IStatisticsService statisticsService;
 
-        public ManagerService(IRepository<Manager> repository)
+        public ManagerService(IRepository<Manager> repository, 
+                              IStatisticsService statisticsService)
         {
             this.repository = repository;
+            this.statisticsService = statisticsService;
         }
 
         public async Task AddAsync(Manager manager)
         {
             await repository.AddAsync(manager);
             await repository.SaveAsync();
+
+            await this.statisticsService.UpdateAsync(StatisticsType.MinutesPlayedByAllManagers, manager);
         }
 
         public async Task<Manager> FindAsync(int id) => await repository.FindAsync(id);
@@ -36,8 +41,12 @@ namespace FootballServices.Domain
 
         public async Task UpdateAsync(Manager manager)
         {
+            var oldManager = repository.Query.FirstOrDefault(m => m.Id == manager.Id);
+
             repository.Update(manager);
             await repository.SaveAsync();
+
+            await this.statisticsService.UpdateAsync(StatisticsType.MinutesPlayedByAllManagers, manager, oldManager);
         }
     }
 }

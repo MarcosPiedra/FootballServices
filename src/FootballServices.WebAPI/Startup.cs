@@ -92,11 +92,13 @@ namespace FootballServices
             services.AddTransient<IRepository<Player>, EFRepository<Player>>();
             services.AddTransient<IRepository<Referee>, EFRepository<Referee>>();
             services.AddTransient<IRepository<Match>, EFRepository<Match>>();
+            services.AddTransient<IRepository<Statistic>, EFRepository<Statistic>>();
 
             services.AddTransient<IManagerService, ManagerService>();
             services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<IRefereeService, RefereeService>();
             services.AddTransient<IMatchService, MatchService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
         }
 
         public void Configure(IApplicationBuilder app,

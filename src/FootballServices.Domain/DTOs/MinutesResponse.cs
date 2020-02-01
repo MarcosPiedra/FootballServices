@@ -4,11 +4,10 @@ using System.Text;
 
 namespace FootballServices.Domain.DTOs
 {
-    public class CardResponse
+    public class MinutesResponse
     {
         public string Name { get; set; } = "";
         public int Id { get; set; } = 0;
-        public string TeamName { get; set; } = "";
         public int Total { get; set; } = 0;
     }
 }
