@@ -20,6 +20,7 @@ namespace FoorballServices.SqlDataAccess
         public DbSet<Referee> Referees { get; set; }
         public DbSet<Match> Matches { get; set; }
         public DbSet<Statistic> Statistics { get; set; }
+        public DbSet<NotValidBeforeStart> NotValidBeforeStart { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +31,7 @@ namespace FoorballServices.SqlDataAccess
             modelBuilder.ApplyConfiguration(new RefereeConfig());
             modelBuilder.ApplyConfiguration(new MatchConfig());
             modelBuilder.ApplyConfiguration(new StatisticsConfig());
+            modelBuilder.ApplyConfiguration(new NotValidBeforeStartConfig());
         }
     }
 }

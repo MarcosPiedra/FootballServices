@@ -106,9 +106,13 @@ namespace FootballServices.Domain
 
         public async Task<List<Match>> GetMatchThatStartInAsync(int minutes)
         {
+            minutes = -Math.Abs(minutes);
+            var now = DateTime.Now;
             var matches = repoMatches.Query
                                      .Where(m => m.Status == MatchStatus.NoPlayedYet
-                                              && m.Date.Subtract(DateTime.Now).Minutes < minutes);
+                                              && !m.IdsIncorrectReported
+                                              && m.Date.AddMinutes(minutes) <= now
+                                              && m.Date <= now);
 
             var matchesToReturn = new List<Match>();
             foreach (var m in matches)

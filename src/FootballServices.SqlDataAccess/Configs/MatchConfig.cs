@@ -24,6 +24,10 @@ namespace FootballServices.SqlDataAccess.Configs
                                          .HasConversion<string>();
             builder.Property(m => m.Status).HasColumnName("Status")
                                            .HasConversion<int>();
+            builder.Property(m => m.IdsIncorrectReported).HasColumnName("IdsIncorrectReported")
+                                           .HasConversion<int>();
+
+            
 
             builder.Ignore(m => m.HouseTeamPlayers);
             builder.Ignore(m => m.AwayTeamPlayers);

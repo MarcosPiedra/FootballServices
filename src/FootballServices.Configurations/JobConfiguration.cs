@@ -6,6 +6,7 @@ namespace FootballServices.Configurations
 {
     public class JobConfiguration
     {
-        public int PeriodBetweenExecution { get; set; }
+        public int MinutesBetweenExecution { get; set; }
+        public string IncorrectAligmentEndPoint { get; set; }
     }
 }

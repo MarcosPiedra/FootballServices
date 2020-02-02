@@ -10,11 +10,11 @@ namespace FootballServices.Domain.Models
         Manager = 0,
     }
 
-    class NotValidBeforeStart
+    public class NotValidBeforeStart
     {
         public int Id { get; set; } = 0;
-        public int Type { get; set; } = 0;
-        public RelatedType IdRelated { get; set; } = RelatedType.Player;
+        public RelatedType RelatedType { get; set; } = RelatedType.Player;
+        public int RelatedId { get; set; } = 0;
         public int MatchId { get; set; } = 0;
     }
 }

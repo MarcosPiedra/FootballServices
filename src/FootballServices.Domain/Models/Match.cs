@@ -22,6 +22,7 @@ namespace FootballServices.Domain.Models
         public int RefereeId { get; set; } = 0;
         public MatchStatus Status { get; set; } = MatchStatus.NoPlayedYet;
         public DateTime Date { get; set; }
+        public bool IdsIncorrectReported { get; set; } = false;
         public List<Player> HouseTeamPlayers { get; set; } = new List<Player>();
         public List<Player> AwayTeamPlayers { get; set; } = new List<Player>();
         public Manager HouseTeamManager { get; set; } = new Manager();

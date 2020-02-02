@@ -84,7 +84,7 @@ namespace FootballServices
                                      .WithIdentity($"Match.trigger", "group1")
                                      .StartNow()
                                      .WithSimpleSchedule(s =>
-                                         s.WithInterval(TimeSpan.FromSeconds(jobConfig.PeriodBetweenExecution))
+                                         s.WithInterval(TimeSpan.FromMinutes(jobConfig.MinutesBetweenExecution))
                                           .RepeatForever())
                                      .Build();
             });
@@ -98,17 +98,21 @@ namespace FootballServices
                 return scheduler;
             });
 
+            services.AddSingleton(jobConfig);
+
             services.AddTransient<IRepository<Manager>, EFRepository<Manager>>();
             services.AddTransient<IRepository<Player>, EFRepository<Player>>();
             services.AddTransient<IRepository<Referee>, EFRepository<Referee>>();
             services.AddTransient<IRepository<Match>, EFRepository<Match>>();
             services.AddTransient<IRepository<Statistic>, EFRepository<Statistic>>();
+            services.AddTransient<IRepository<NotValidBeforeStart>, EFRepository<NotValidBeforeStart>>();
 
             services.AddTransient<IManagerService, ManagerService>();
             services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<IRefereeService, RefereeService>();
             services.AddTransient<IMatchService, MatchService>();
             services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddTransient<IIncorrectAligmentEndPoint, IncorrectAligmentEndPoint>();
         }
 
         public void Configure(IApplicationBuilder app,
