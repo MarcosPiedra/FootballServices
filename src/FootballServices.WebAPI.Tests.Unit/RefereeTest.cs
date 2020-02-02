@@ -15,8 +15,8 @@ namespace FoorballServices.WebAPI.Tests.Unit
     public class RefereeTest : FootballWebApi
     {
         private static string RefereeMethods => "api/v1/Referee";
-        private RefereeRequest GetToSend() => new RefereeRequest() { Name = "Referee 1", MinutesPlayed = 5 };
-        private void ChangeToSend(RefereeRequest m) => m.Name = "Name X";
+        private RefereeRequest GetToSend() => new RefereeRequest() { Name = "Referee x", MinutesPlayed = 5 };
+        private void ChangeToSend(RefereeRequest m) => m.Name = "Referee 11";
 
         [Fact]
         public async Task Get_all_return_ok()

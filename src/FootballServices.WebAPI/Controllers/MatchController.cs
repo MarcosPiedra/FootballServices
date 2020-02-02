@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
 using FootballServices.Domain;
 using FootballServices.Domain.DTOs;
 using FootballServices.Domain.Models;
@@ -21,6 +22,7 @@ namespace FootballServices.WebAPI.Controllers
         private readonly IPlayerService playerService;
         private readonly IManagerService managerService;
         private readonly IRefereeService refereeService;
+        private readonly IValidator<Match> validator;
         private readonly IMapper mapper;
 
         public MatchController(ILogger<MatchController> logger,
@@ -28,6 +30,7 @@ namespace FootballServices.WebAPI.Controllers
                                IPlayerService playerService,
                                IManagerService managerService,
                                IRefereeService refereeService,
+                               IValidator<Match> validator,
                                IMapper mapper)
         {
             this.logger = logger;
@@ -35,6 +38,7 @@ namespace FootballServices.WebAPI.Controllers
             this.playerService = playerService;
             this.managerService = managerService;
             this.refereeService = refereeService;
+            this.validator = validator;
             this.mapper = mapper;
         }
 
@@ -85,12 +89,12 @@ namespace FootballServices.WebAPI.Controllers
                 return BadRequest();
             }
 
-            if (await ThereAreNotFoundAsync(matchRequest))
-            {
-                return NotFound();
-            }
-
             var match = this.mapper.Map<MatchRequest, Match>(matchRequest);
+
+            if (!validator.Validate(match).IsValid)
+            {
+                return BadRequest();
+            }
 
             await this.matchService.AddAsync(match);
 
@@ -110,11 +114,6 @@ namespace FootballServices.WebAPI.Controllers
                 return BadRequest();
             }
 
-            if (await ThereAreNotFoundAsync(matchRequest))
-            {
-                return NotFound();
-            }
-
             var matchToUpdate = await this.matchService.FindAsync(id);
             if (matchToUpdate == null)
             {
@@ -122,6 +121,11 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             var match = this.mapper.Map(matchRequest, matchToUpdate);
+
+            if (!validator.Validate(match).IsValid)
+            {
+                return BadRequest();
+            }
 
             await this.matchService.UpdateAsync(match);
 
@@ -155,26 +159,5 @@ namespace FootballServices.WebAPI.Controllers
             return Ok();
         }
 
-        private async Task<bool> ThereAreNotFoundAsync(MatchRequest matchRequest)
-        {
-            foreach (var p in matchRequest.AwayTeam)
-                if (await playerService.FindAsync(p) == null)
-                    return true;
-
-            foreach (var p in matchRequest.HouseTeam)
-                if (await playerService.FindAsync(p) == null)
-                    return true;
-
-            if (await managerService.FindAsync(matchRequest.AwayManager) == null)
-                return true;
-
-            if (await managerService.FindAsync(matchRequest.HouseManager) == null)
-                return true;
-
-            if (await refereeService.FindAsync(matchRequest.Referee) == null)
-                return true;
-
-            return false;
-        }
     }
 }

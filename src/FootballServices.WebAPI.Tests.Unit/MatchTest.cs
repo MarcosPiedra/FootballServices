@@ -24,11 +24,11 @@ namespace FoorballServices.WebAPI.Tests.Unit
             HouseManager = 1,
             HouseTeam = new List<int>() { 3, 4 },
             Referee = 2,
-            Name = "Name XX"
+            Name = "Name XXX"
         };
         private void ChangeToSend(MatchRequest m)
         {
-            m.Name = "Name YY";
+            m.Name = "Name YYY";
             var x = m.AwayManager;
             var y = m.AwayTeam;
             m.AwayManager = m.HouseManager;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
 using FootballServices.Domain;
 using FootballServices.Domain.DTOs;
 using FootballServices.Domain.Models;
@@ -18,14 +19,17 @@ namespace FootballServices.WebAPI.Controllers
     {
         private readonly ILogger<ManagerController> logger;
         private readonly IManagerService managerServices;
+        private readonly IValidator<Manager> validator;
         private readonly IMapper mapper;
 
         public ManagerController(ILogger<ManagerController> logger,
                                  IManagerService managerServices,
+                                 IValidator<Manager> validator,
                                  IMapper mapper)
         {
             this.logger = logger;
             this.managerServices = managerServices;
+            this.validator = validator;
             this.mapper = mapper;
         }
 
@@ -78,6 +82,11 @@ namespace FootballServices.WebAPI.Controllers
 
             var manager = this.mapper.Map<ManagerRequest, Manager>(managerRequest);
 
+            if (!validator.Validate(manager).IsValid)
+            {
+                return BadRequest();
+            }
+
             await this.managerServices.AddAsync(manager);
 
             logger.LogInformation($"CreateManager {manager.Id}");
@@ -103,6 +112,11 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             var manager = this.mapper.Map(managerRequest, managerToUpdate);
+
+            if (!validator.Validate(manager).IsValid)
+            {
+                return BadRequest();
+            }
 
             await this.managerServices.UpdateAsync(manager);
 

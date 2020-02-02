@@ -15,8 +15,8 @@ namespace FoorballServices.WebAPI.Tests.Unit
     public class PlayerTest : FootballWebApi
     {
         private static string PlayerMethods => "api/v1/Player";
-        private PlayerRequest GetToSend() => new PlayerRequest() { Name = "Player", TeamName = "Team Name 1", YellowCards = 1, MinutesPlayed = 5, Number = 10, RedCards = 1 };
-        private void ChangeToSend(PlayerRequest m) => m.TeamName = "Team name X";
+        private PlayerRequest GetToSend() => new PlayerRequest() { Name = "Player AA", TeamName = "Team Name 13", YellowCards = 1, MinutesPlayed = 5, Number = 10, RedCards = 1 };
+        private void ChangeToSend(PlayerRequest m) => m.TeamName = "Team name X12";
 
         [Fact]
         public async Task Get_all_return_ok()

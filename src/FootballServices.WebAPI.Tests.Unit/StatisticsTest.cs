@@ -23,9 +23,9 @@ namespace FoorballServices.WebAPI.Tests.Unit
         private static string StatisticsMethods => "api/v1/Statistics";
         private static string PlayersMethods => "api/v1/Player";
         private static string RefereeMethods => "api/v1/Referee";
-        private ManagerRequest GetManagerToSend() => new ManagerRequest() { Name = "Manager", TeamName = "Team Name 1" };
-        private PlayerRequest GetPlayerToSend() => new PlayerRequest() { Name = "Player", TeamName = "Team Name 1" };
-        private RefereeRequest GetRefereeToSend() => new RefereeRequest() { Name = "Referee" };
+        private ManagerRequest GetManagerToSend(string name) => new ManagerRequest() { Name = name, TeamName = "Team Name 1" };
+        private PlayerRequest GetPlayerToSend(string name) => new PlayerRequest() { Name = name, TeamName = "Team Name 1" };
+        private RefereeRequest GetRefereeToSend(string name) => new RefereeRequest() { Name = name };
 
         /// <summary>
         /// Key => Name of the team
@@ -97,13 +97,14 @@ namespace FoorballServices.WebAPI.Tests.Unit
                 {
                     Assert.Equal(totalMinutesByReferee, minutes.Total);
                     continue;
-                }                
+                }
             }
         }
 
         private async Task CreateReferee(IHost server, HttpClient client)
         {
-            var referee = GetRefereeToSend();
+            var name = Guid.NewGuid().ToString().Substring(0, 6);
+            var referee = GetRefereeToSend(name);
             var content = new StringContent(JsonConvert.SerializeObject(referee), Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"{RefereeMethods}", content);
             var idQuery = response.Headers.Location.Query.Replace("?id=", "");
@@ -127,7 +128,8 @@ namespace FoorballServices.WebAPI.Tests.Unit
 
         private async Task CreateAndUpdatePlayer(IHost server, HttpClient client, string team)
         {
-            var playerToSend = GetPlayerToSend();
+            var name = Guid.NewGuid().ToString().Substring(0, 6);
+            var playerToSend = GetPlayerToSend(name);
             playerToSend.TeamName = team;
             var content = new StringContent(JsonConvert.SerializeObject(playerToSend), Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"{PlayersMethods}", content);
@@ -155,7 +157,8 @@ namespace FoorballServices.WebAPI.Tests.Unit
 
         private async Task CreateAndUpdateManager(IHost server, HttpClient client, string team)
         {
-            var managerToSend = GetManagerToSend();
+            var name = Guid.NewGuid().ToString().Substring(0, 6);
+            var managerToSend = GetManagerToSend(name);
             managerToSend.TeamName = team;
             var content = new StringContent(JsonConvert.SerializeObject(managerToSend), Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"{ManagerMethods}", content);

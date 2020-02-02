@@ -15,8 +15,8 @@ namespace FoorballServices.WebAPI.Tests.Unit
     public class ManagerTest : FootballWebApi
     {
         private static string ManagerMethods => "api/v1/Manager";
-        private ManagerRequest GetToSend() => new ManagerRequest() { Name = "Manager", TeamName = "Team Name 1", YellowCards = 1 };
-        private void ChangeToSend(ManagerRequest m) => m.TeamName = "Team name X";
+        private ManagerRequest GetToSend() => new ManagerRequest() { Name = "Manager 2", TeamName = "Team Name 15", YellowCards = 1 };
+        private void ChangeToSend(ManagerRequest m) => m.TeamName = "Team name X1";
 
         [Fact]
         public async Task Get_all_return_ok()

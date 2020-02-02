@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
 using FootballServices.Domain;
 using FootballServices.Domain.DTOs;
 using FootballServices.Domain.Models;
@@ -18,14 +19,17 @@ namespace FootballServices.WebAPI.Controllers
     {
         private readonly ILogger<RefereeController> logger;
         private readonly IRefereeService refereeService;
+        private readonly IValidator<Referee> validator;
         private readonly IMapper mapper;
 
         public RefereeController(ILogger<RefereeController> logger,
                                  IRefereeService refereeService,
+                                 IValidator<Referee> validator,
                                  IMapper mapper)
         {
             this.logger = logger;
             this.refereeService = refereeService;
+            this.validator = validator;
             this.mapper = mapper;
         }
 
@@ -78,6 +82,11 @@ namespace FootballServices.WebAPI.Controllers
 
             var referee = this.mapper.Map<RefereeRequest, Referee>(refereeRequest);
 
+            if (!validator.Validate(referee).IsValid)
+            {
+                return BadRequest();
+            }
+
             await this.refereeService.AddAsync(referee);
 
             logger.LogInformation($"CreateReferee {referee.Id}");
@@ -103,6 +112,11 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             var referee = this.mapper.Map(refereeRequest, refereeToUpdate);
+
+            if (!validator.Validate(referee).IsValid)
+            {
+                return BadRequest();
+            }
 
             await this.refereeService.UpdateAsync(referee);
 

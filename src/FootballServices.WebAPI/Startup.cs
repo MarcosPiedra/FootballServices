@@ -24,6 +24,9 @@ using FootballServices.Domain.Models;
 using FootballServices.SqlDataAccess;
 using FootballServices.Domain;
 using System.IO;
+using FluentValidation.AspNetCore;
+using FootballServices.Domain.Validation;
+using FluentValidation;
 
 namespace FootballServices
 {
@@ -37,7 +40,6 @@ namespace FootballServices
             var builder = new ConfigurationBuilder()
                          .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-
                          .AddEnvironmentVariables();
 
             this.configuration = builder.Build();
@@ -57,12 +59,15 @@ namespace FootballServices
             }
 
             services.AddMvc()
+                    .AddFluentValidation()
                     .AddNewtonsoftJson();
 
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
             services.AddApiVersioning();
+
+            //services.AddFluentValidation()
 
             services.AddDbContext<FootballServicesContext>((serviceProvider, optionsBuilder) =>
             {
@@ -112,6 +117,11 @@ namespace FootballServices
             services.AddTransient<IMatchService, MatchService>();
             services.AddTransient<IStatisticsService, StatisticsService>();
             services.AddTransient<IIncorrectAligmentEndPoint, IncorrectAligmentEndPoint>();
+
+            services.AddTransient<IValidator<Referee>, RefereeValidator>();
+            services.AddTransient<IValidator<Player>, PlayerValidator>();
+            services.AddTransient<IValidator<Manager>, ManagerValidator>();
+            services.AddTransient<IValidator<Match>, MatchValidator>();
         }
 
         public void Configure(IApplicationBuilder app,
