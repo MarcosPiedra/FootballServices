@@ -28,7 +28,10 @@ namespace FootballServices
                                {
                                    webHostBuilder.ConfigureLogging(logging => logging.ClearProviders())
                                                  .UseNLog() 
-                                                 .UseStartup<Startup>();
+                                                 .UseKestrel()
+                                                 .UseIISIntegration()
+                                                 .UseStartup<Startup>()
+                                                 .UseUrls("http://*:3143/");
                                })
                                .Build();
 
