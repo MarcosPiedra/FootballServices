@@ -28,7 +28,7 @@ namespace FootballServices.WebAPI
                    .ForMember(d => d.AwayTeamPlayersIds, o => o.MapFrom(s => $"[{string.Join(',', s.AwayTeam)}]"))
                    .ForMember(d => d.AwayTeamManagerId, o => o.MapFrom(s => s.AwayManager))
                    .ForMember(d => d.HouseTeamPlayersIds, o => o.MapFrom(s => $"[{string.Join(',', s.HouseTeam)}]"))
-                   .ForMember(d => d.HouseTeamManagerId, o => o.MapFrom(s => s.AwayManager));
+                   .ForMember(d => d.HouseTeamManagerId, o => o.MapFrom(s => s.HouseManager));
 
             CreateMap<Statistic, CardResponse>();
             CreateMap<Statistic, MinuteResponse>();

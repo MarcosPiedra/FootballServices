@@ -107,9 +107,13 @@ namespace FootballServices.Domain
 
         private async Task UpdateAsync(StatisticsType type, int valueToAdd, string team = "")
         {
-            var st = await this.repository
-                               .Query
-                               .FirstOrDefaultAsync(s => s.Type.Equals(type));
+            var q = this.repository.Query;
+            if (type == StatisticsType.MinutesPlayedByAllPlayers)
+            {
+                team = "";
+            }
+
+            var st = await q.FirstOrDefaultAsync(s => s.Type.Equals(type) && s.TeamName.Equals(team));
 
             if (st == null)
             {
