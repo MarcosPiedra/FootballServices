@@ -1,4 +1,5 @@
-﻿using FootballServices.Domain;
+﻿using FootballServices.Configurations;
+using FootballServices.Domain;
 using FootballServices.Domain.Models;
 using Quartz;
 using System;
@@ -11,14 +12,17 @@ namespace FootballServices.BackgroundJob
 {
     public class MatchesJob : IJob
     {
+        private readonly JobConfiguration jobConfiguration;
         private readonly IMatchService matchService;
         private readonly IRepository<NotValidBeforeStart> notValidRepository;
         private readonly IIncorrectAligmentEndPoint incorrectAligmentEndPoint;
 
-        public MatchesJob(IMatchService matchService,
+        public MatchesJob(JobConfiguration jobConfiguration,
+                          IMatchService matchService,
                           IRepository<NotValidBeforeStart> notValidRepository,
                           IIncorrectAligmentEndPoint incorrectAligmentEndPoint)
         {
+            this.jobConfiguration = jobConfiguration;
             this.matchService = matchService;
             this.notValidRepository = notValidRepository;
             this.incorrectAligmentEndPoint = incorrectAligmentEndPoint;
@@ -28,7 +32,7 @@ namespace FootballServices.BackgroundJob
         {
             await this.matchService.UpdateStatusAsync();
 
-            var matches = await this.matchService.GetMatchThatStartInAsync(5);
+            var matches = await this.matchService.GetMatchThatStartInAsync(this.jobConfiguration.MinutesBeforeStartMatch);
             foreach (var m in matches)
             {
                 var playersNotValids = new List<int>();

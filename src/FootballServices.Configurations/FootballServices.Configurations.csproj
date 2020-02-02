@@ -7,9 +7,13 @@
   <ItemGroup>
     <None Remove="appsettings.Debug.json" />
     <None Remove="appsettings.json" />
+    <None Remove="appsettings.Test.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="appsettings.Test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="appsettings.Debug.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

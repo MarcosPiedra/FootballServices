@@ -36,9 +36,8 @@ namespace FootballServices
         {
             var builder = new ConfigurationBuilder()
                          .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-#if DEBUG
-                         .AddJsonFile($"appsettings.Debug.json", optional: true, reloadOnChange: true)
-#endif
+                         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+
                          .AddEnvironmentVariables();
 
             this.configuration = builder.Build();

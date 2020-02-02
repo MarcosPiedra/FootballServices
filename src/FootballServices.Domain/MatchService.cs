@@ -109,15 +109,16 @@ namespace FootballServices.Domain
             minutes = -Math.Abs(minutes);
             var now = DateTime.Now;
             var matches = repoMatches.Query
-                                     .Where(m => m.Status == MatchStatus.NoPlayedYet
-                                              && !m.IdsIncorrectReported
-                                              && m.Date.AddMinutes(minutes) <= now
-                                              && m.Date <= now);
+                                              .Where(m => m.Status == MatchStatus.NoPlayedYet
+                                                       && !m.IdsIncorrectReported);
 
             var matchesToReturn = new List<Match>();
             foreach (var m in matches)
             {
-                matchesToReturn.Add(await this.FindAsync(m.Id));
+                if (m.Date.AddMinutes(minutes) <= now)
+                {
+                    matchesToReturn.Add(await this.FindAsync(m.Id));
+                }                
             }
 
             return matchesToReturn;
@@ -139,11 +140,15 @@ namespace FootballServices.Domain
         public void UpdateStatus(Match match)
         {
             //DateTime provider??
-            if (match.Date > DateTime.Now)
+
+            var now = DateTime.Now;
+            var dateMatchplayed = match.Date.AddMinutes(90);
+
+            if (now >= dateMatchplayed)
             {
                 match.Status = MatchStatus.Finished;
             }
-            else if (DateTime.Now.Subtract(new TimeSpan(0, 90, 0)) <= match.Date)
+            else if (now < dateMatchplayed && match.Date <= now)
             {
                 match.Status = MatchStatus.Playing;
             }
@@ -158,6 +163,7 @@ namespace FootballServices.Domain
             foreach (var m in repoMatches.Query)
             {
                 UpdateStatus(m);
+                repoMatches.Update(m);
             }
             await repoMatches.SaveAsync();
         }

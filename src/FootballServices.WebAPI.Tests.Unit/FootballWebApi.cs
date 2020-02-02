@@ -16,7 +16,7 @@ namespace FootballServices.WebAPI.Tests.Unit
 {
     public class FootballWebApi
     {
-        public async Task<IHost> GetServer()
+        public async Task<IHost> GetServer(Action<IServiceCollection> servicesConfiguration = null)
         {
             var path = Assembly.GetAssembly(typeof(FootballWebApi)).Location;
             var hostBuilder = new HostBuilder()
@@ -25,6 +25,10 @@ namespace FootballServices.WebAPI.Tests.Unit
                             webHost.UseTestServer();
                             webHost.UseStartup<Startup>();
                             webHost.UseEnvironment("Test");
+                            if (servicesConfiguration != null)
+                            {
+                                webHost.ConfigureTestServices(servicesConfiguration);
+                            }
                         });
 
             return await hostBuilder.StartAsync();
