@@ -42,7 +42,7 @@ namespace FootballServices.WebAPI.Controllers
         [ProducesResponseType(typeof(List<MatchResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<List<MatchResponse>>> GetAll()
         {
-            var matchList = await this.matchService.GetAllAsync();
+            var matchList = await this.matchService.GetAllMatchesAsync();
 
             if (matchList == null)
             {
@@ -51,13 +51,15 @@ namespace FootballServices.WebAPI.Controllers
 
             var matchResponseList = this.mapper.Map<List<Match>, List<MatchResponse>>(matchList);
 
+            logger.LogInformation($"GetAllMatchesAsync");
+
             return matchResponseList;
         }
 
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(MatchResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<MatchResponse>> Get(int id)
+        public async Task<ActionResult<MatchResponse>> GetMatch(int id)
         {
             var match = await this.matchService.FindAsync(id);
 
@@ -67,6 +69,8 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             var matchResponse = this.mapper.Map<Match, MatchResponse>(match);
+
+            logger.LogInformation($"GetMatch");
 
             return matchResponse;
         }
@@ -89,6 +93,8 @@ namespace FootballServices.WebAPI.Controllers
             var match = this.mapper.Map<MatchRequest, Match>(matchRequest);
 
             await this.matchService.AddAsync(match);
+
+            logger.LogInformation($"CreateMatch {match.Id}");
 
             return CreatedAtAction(nameof(CreateMatch), new { id = match.Id, version = this.HttpContext.GetRequestedApiVersion().ToString() }, match.Id);
         }
@@ -119,6 +125,8 @@ namespace FootballServices.WebAPI.Controllers
 
             await this.matchService.UpdateAsync(match);
 
+            logger.LogInformation($"UpdateMatch {match.Id}");
+
             return Ok();
         }
 
@@ -141,6 +149,8 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             await this.matchService.RemoveAsync(matchToDelete);
+
+            logger.LogInformation($"DeleteMatchByIdAsync {matchToDelete.Id}");
 
             return Ok();
         }

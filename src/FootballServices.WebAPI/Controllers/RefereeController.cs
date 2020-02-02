@@ -31,7 +31,7 @@ namespace FootballServices.WebAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<RefereeResponse>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<List<RefereeResponse>>> GetAll()
+        public async Task<ActionResult<List<RefereeResponse>>> GetAllReferees()
         {
             var refereeList = await this.refereeService.GetAllAsync();
 
@@ -42,13 +42,15 @@ namespace FootballServices.WebAPI.Controllers
 
             var refereeResponseList = this.mapper.Map<List<Referee>, List<RefereeResponse>>(refereeList);
 
+            logger.LogInformation($"GetAllReferees");
+
             return refereeResponseList;
         }
 
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(RefereeResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<RefereeResponse>> Get(int id)
+        public async Task<ActionResult<RefereeResponse>> GetReferee(int id)
         {
             var referee = await this.refereeService.FindAsync(id);
 
@@ -58,6 +60,8 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             var refereeResponse = this.mapper.Map<Referee, RefereeResponse>(referee);
+
+            logger.LogInformation($"GetReferee {id}");
 
             return refereeResponse;
         }
@@ -75,7 +79,9 @@ namespace FootballServices.WebAPI.Controllers
             var referee = this.mapper.Map<RefereeRequest, Referee>(refereeRequest);
 
             await this.refereeService.AddAsync(referee);
-            
+
+            logger.LogInformation($"CreateReferee {referee.Id}");
+
             return CreatedAtAction(nameof(CreateReferee), new { id = referee.Id, version = this.HttpContext.GetRequestedApiVersion().ToString() }, referee.Id);
         }
 
@@ -99,7 +105,9 @@ namespace FootballServices.WebAPI.Controllers
             var referee = this.mapper.Map(refereeRequest, refereeToUpdate);
 
             await this.refereeService.UpdateAsync(referee);
-            
+
+            logger.LogInformation($"UpdateReferee {referee.Id}");
+
             return Ok();
         }
 
@@ -122,6 +130,8 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             await this.refereeService.RemoveAsync(refereeToDelete);
+
+            logger.LogInformation($"DeleteRefereeByIdAsync {refereeToDelete.Id}");
 
             return Ok();
         }

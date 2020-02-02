@@ -42,6 +42,8 @@ namespace FootballServices.WebAPI.Controllers
 
             var stReponseList = this.mapper.Map<List<Statistic>, List<CardResponse>>(stList);
 
+            logger.LogInformation($"GetYellowCards");
+
             return stReponseList;
         }
 
@@ -57,6 +59,8 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             var stReponseList = this.mapper.Map<List<Statistic>, List<CardResponse>>(stList);
+
+            logger.LogInformation($"GetRedCards");
 
             return stReponseList;
         }
@@ -74,6 +78,8 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             var stReponseList = this.mapper.Map<List<Statistic>, List<MinuteResponse>>(minutes);
+
+            logger.LogInformation($"GetMinutes");
 
             return stReponseList;
         }

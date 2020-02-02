@@ -31,7 +31,7 @@ namespace FootballServices.WebAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<PlayerResponse>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<List<PlayerResponse>>> GetAll()
+        public async Task<ActionResult<List<PlayerResponse>>> GetAllPlayers()
         {
             var playerList = await this.playerService.GetAllAsync();
 
@@ -42,13 +42,15 @@ namespace FootballServices.WebAPI.Controllers
 
             var playerResponseList = this.mapper.Map<List<Player>, List<PlayerResponse>>(playerList);
 
+            logger.LogInformation($"GetAllPlayers");
+
             return playerResponseList;
         }
 
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(PlayerResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<PlayerResponse>> Get(int id)
+        public async Task<ActionResult<PlayerResponse>> GetPlayer(int id)
         {
             var player = await this.playerService.FindAsync(id);
 
@@ -58,6 +60,8 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             var playerResponse = this.mapper.Map<Player, PlayerResponse>(player);
+
+            logger.LogInformation($"GetPlayer {id}");
 
             return playerResponse;
         }
@@ -75,7 +79,9 @@ namespace FootballServices.WebAPI.Controllers
             var player = this.mapper.Map<PlayerRequest, Player>(playerRequest);
 
             await this.playerService.AddAsync(player);
-            
+
+            logger.LogInformation($"CreatePlayer {player.Id}");
+
             return CreatedAtAction(nameof(CreatePlayer), new { id = player.Id, version = this.HttpContext.GetRequestedApiVersion().ToString() }, player.Id);
         }
 
@@ -99,7 +105,9 @@ namespace FootballServices.WebAPI.Controllers
             var player = this.mapper.Map(playerRequest, playerToUpdate);
 
             await this.playerService.UpdateAsync(player);
-            
+
+            logger.LogInformation($"UpdatePlayer {player.Id}");
+
             return Ok();
         }
 
@@ -122,6 +130,8 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             await this.playerService.RemoveAsync(playerToDelete);
+
+            logger.LogInformation($"DeletePlayerByIdAsync {playerToDelete.Id}");
 
             return Ok();
         }

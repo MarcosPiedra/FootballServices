@@ -31,7 +31,7 @@ namespace FootballServices.WebAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<ManagerResponse>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<List<ManagerResponse>>> GetAll()
+        public async Task<ActionResult<List<ManagerResponse>>> GetAllManagers()
         {
             var managerList = await this.managerServices.GetAllAsync();
 
@@ -42,13 +42,15 @@ namespace FootballServices.WebAPI.Controllers
 
             var managerResponseList = this.mapper.Map<List<Manager>, List<ManagerResponse>>(managerList);
 
+            logger.LogInformation($"GetAllManagers");
+
             return managerResponseList;
         }
 
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(ManagerResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<ManagerResponse>> Get(int id)
+        public async Task<ActionResult<ManagerResponse>> GetManager(int id)
         {
             var manager = await this.managerServices.FindAsync(id);
 
@@ -58,6 +60,8 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             var managerResponse = this.mapper.Map<Manager, ManagerResponse>(manager);
+
+            logger.LogInformation($"GetManager {id}");
 
             return managerResponse;
         }
@@ -75,7 +79,9 @@ namespace FootballServices.WebAPI.Controllers
             var manager = this.mapper.Map<ManagerRequest, Manager>(managerRequest);
 
             await this.managerServices.AddAsync(manager);
-            
+
+            logger.LogInformation($"CreateManager {manager.Id}");
+
             return CreatedAtAction(nameof(CreateManager), new { id = manager.Id, version = this.HttpContext.GetRequestedApiVersion().ToString() }, manager.Id);
         }
 
@@ -99,7 +105,9 @@ namespace FootballServices.WebAPI.Controllers
             var manager = this.mapper.Map(managerRequest, managerToUpdate);
 
             await this.managerServices.UpdateAsync(manager);
-            
+
+            logger.LogInformation($"UpdateManager {manager.Id}");
+
             return Ok();
         }
 
@@ -122,6 +130,8 @@ namespace FootballServices.WebAPI.Controllers
             }
 
             await this.managerServices.RemoveAsync(managerToDelete);
+
+            logger.LogInformation($"DeleteManagerByIdAsync {managerToDelete.Id}");
 
             return Ok();
         }

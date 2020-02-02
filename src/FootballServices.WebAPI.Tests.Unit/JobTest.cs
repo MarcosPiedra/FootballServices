@@ -51,7 +51,7 @@ namespace FoorballServices.WebAPI.Tests.Unit
                 s =>
                 {
                     s.AddSingleton(this);
-                    s.AddTransient<IIncorrectAligmentEndPoint, IncorrectAligmentEndPoint>();
+                    //s.AddTransient<IIncorrectAligmentEndPoint, IncorrectAligmentEndPoint>();
                 });
 
             CreateMatchForReport();

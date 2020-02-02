@@ -14,14 +14,11 @@ namespace FootballServices
     {
         public static async Task Main(string[] args)
         {
-#if DEBUG 
-            var logger = NLogBuilder.ConfigureNLog("nlog.Development.config").GetCurrentClassLogger();
-#else
             var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-#endif
+
             try
             {
-                logger.Debug("Init Main");
+                logger.Info("Init Main");
 
                 var host = Host.CreateDefaultBuilder(args)
                                .ConfigureWebHostDefaults(webHostBuilder =>
