@@ -23,8 +23,9 @@ namespace FootballServices
                 var host = Host.CreateDefaultBuilder(args)
                                .ConfigureWebHostDefaults(webHostBuilder =>
                                {
-                                   webHostBuilder.ConfigureLogging(logging => logging.ClearProviders())
-                                                 .UseNLog() 
+                                   webHostBuilder.ConfigureLogging(l => l.ClearProviders())
+                                                 .ConfigureLogging(l => l.SetMinimumLevel(LogLevel.Trace))
+                                                 .UseNLog()
                                                  .UseKestrel()
                                                  .UseIISIntegration()
                                                  .UseStartup<Startup>()

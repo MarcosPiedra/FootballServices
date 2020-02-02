@@ -67,8 +67,6 @@ namespace FootballServices
             services.AddControllers();
             services.AddApiVersioning();
 
-            //services.AddFluentValidation()
-
             services.AddDbContext<FootballServicesContext>((serviceProvider, optionsBuilder) =>
             {
                 optionsBuilder.UseSqlite(connConfig.DatabaseConnection);
