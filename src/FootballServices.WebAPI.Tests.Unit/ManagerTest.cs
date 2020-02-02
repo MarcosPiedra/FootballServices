@@ -29,10 +29,15 @@ namespace FoorballServices.WebAPI.Tests.Unit
         [Fact]
         public async Task Get_by_id_return_ok()
         {
-            var id = 1;
+            var toSend = GetToSend();
             var server = await GetServer();
             var client = server.GetTestClient();
-            var response = await client.GetAsync($"{ManagerMethods}/{id}");
+            var content = new StringContent(JsonConvert.SerializeObject(toSend), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync($"{ManagerMethods}", content);
+            response.EnsureSuccessStatusCode();
+
+            var id = 1;
+            response = await client.GetAsync($"{ManagerMethods}/{id}");
             response.EnsureSuccessStatusCode();
         }
         [Fact]

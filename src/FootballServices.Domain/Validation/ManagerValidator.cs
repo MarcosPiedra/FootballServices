@@ -17,7 +17,6 @@ namespace FootballServices.Domain.Validation
 
             RuleFor(m => m.Name).NotEmpty().WithMessage("Manager name is required");
             RuleFor(m => m.TeamName).NotEmpty().WithMessage("TeamName name is required");
-            RuleFor(m => m).Must(m => NotExistsManagerName(m)).WithMessage("The manager name is used");
             RuleFor(m => m).Must(m => NotExistsInOtherTeam(m)).WithMessage("There are other team with the same manager");
         }
 
@@ -29,16 +28,6 @@ namespace FootballServices.Domain.Validation
                 q = q.Where(r => r.Id != manager.Id);
 
             return q.Count(r => r.TeamName == manager.TeamName) == 0;
-        }
-
-        public bool NotExistsManagerName(Manager manager)
-        {
-            var q = this.repository.Query;
-
-            if (manager.Id > 0)
-                q = q.Where(r => r.Id != manager.Id);
-            
-            return q.Count(r => r.Name == manager.Name) == 0;
         }
     }
 }

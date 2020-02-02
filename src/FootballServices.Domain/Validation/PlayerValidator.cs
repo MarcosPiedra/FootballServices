@@ -17,17 +17,6 @@ namespace FootballServices.Domain.Validation
 
             RuleFor(p => p.Name).NotEmpty().WithMessage("Player name is required");
             RuleFor(p => p.TeamName).NotEmpty().WithMessage("Team name is required");
-            RuleFor(p => p).Must(p => NotExistsPlayerName(p)).WithMessage("The player name is used");
-        }
-
-        public bool NotExistsPlayerName(Player player)
-        {
-            var q = this.repository.Query;
-
-            if (player.Id > 0)
-                q = q.Where(r => r.Id != player.Id);
-            
-            return q.Count(r => r.Name == player.Name) == 0;
         }
     }
 }

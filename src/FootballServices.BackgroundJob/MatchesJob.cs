@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FootballServices.BackgroundJob
 {
-    public class MatchesJob : IJob
+    public class MatchesJob : ISpecificJob
     {
         private readonly JobConfiguration jobConfiguration;
         private readonly IMatchService matchService;

@@ -72,34 +72,6 @@ namespace FootballServices
                 optionsBuilder.UseSqlite(connConfig.DatabaseConnection);
             }, ServiceLifetime.Transient);
 
-            services.Add(new ServiceDescriptor(typeof(IJob), typeof(MatchesJob), ServiceLifetime.Transient));
-            services.AddSingleton<IJobFactory, ScheduledJobFactory>();
-            services.AddSingleton(provider =>
-            {
-                return JobBuilder.Create<MatchesJob>()
-                                 .WithIdentity("Match.job", "group1")
-                                 .Build();
-            });
-            services.AddSingleton(provider =>
-            {
-                return TriggerBuilder.Create()
-                                     .WithIdentity($"Match.trigger", "group1")
-                                     .StartNow()
-                                     .WithSimpleSchedule(s =>
-                                         s.WithInterval(TimeSpan.FromMinutes(jobConfig.MinutesBetweenExecution))
-                                          .RepeatForever())
-                                     .Build();
-            });
-            services.AddSingleton(provider =>
-            {
-                var prop = new NameValueCollection { { "quartz.threadPool.threadCount", "1" } };
-                var schedulerFactory = new StdSchedulerFactory(prop);
-                var scheduler = schedulerFactory.GetScheduler().Result;
-                scheduler.JobFactory = provider.GetService<IJobFactory>();
-                scheduler.Start();
-                return scheduler;
-            });
-
             services.AddSingleton(jobConfig);
 
             services.AddTransient<IRepository<Manager>, EFRepository<Manager>>();
@@ -120,6 +92,34 @@ namespace FootballServices
             services.AddTransient<IValidator<Player>, PlayerValidator>();
             services.AddTransient<IValidator<Manager>, ManagerValidator>();
             services.AddTransient<IValidator<Match>, MatchValidator>();
+
+            services.Add(new ServiceDescriptor(typeof(IJob), typeof(ExecuteJob), ServiceLifetime.Transient));
+            services.Add(new ServiceDescriptor(typeof(ISpecificJob), typeof(MatchesJob), ServiceLifetime.Transient));
+            services.AddSingleton<IJobFactory, ScheduledJobFactory>();
+            services.AddSingleton(provider =>
+            {
+                return JobBuilder.Create<MatchesJob>()
+                                 .WithIdentity("Match.job", "group1")
+                                 .Build();
+            });
+            services.AddSingleton(provider =>
+            {
+                return TriggerBuilder.Create()
+                                     .WithIdentity($"Match.trigger", "group1")
+                                     .WithSimpleSchedule(s =>
+                                         s.WithInterval(TimeSpan.FromMinutes(jobConfig.MinutesBetweenExecution))
+                                          .RepeatForever())
+                                     .Build();
+            });
+            services.AddSingleton(provider =>
+            {
+                var prop = new NameValueCollection { { "quartz.threadPool.threadCount", "1" } };
+                var schedulerFactory = new StdSchedulerFactory(prop);
+                var scheduler = schedulerFactory.GetScheduler().Result;
+                scheduler.JobFactory = provider.GetService<IJobFactory>();
+                scheduler.Start();
+                return scheduler;
+            });
         }
 
         public void Configure(IApplicationBuilder app,

@@ -1,4 +1,5 @@
-﻿using Quartz;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Quartz;
 using Quartz.Spi;
 using System;
 

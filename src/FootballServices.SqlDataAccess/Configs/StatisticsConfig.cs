@@ -16,6 +16,7 @@ namespace FootballServices.SqlDataAccess.Configs
             builder.Property(m => m.Id).HasColumnName("Id");
             builder.Property(m => m.Total).HasColumnName("Total");
             builder.Property(m => m.TeamName).HasColumnName("TeamName");
+            builder.Property(m => m.Name).HasColumnName("Name");
             builder.Property(m => m.Type).HasColumnName("TypeId")
                                            .HasConversion<int>(); 
 

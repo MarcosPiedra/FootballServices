@@ -35,7 +35,7 @@ namespace FootballServices.Domain
         {
             CreateParams(newValues, oldValues, out StatisticsParams stNewValues, out StatisticsParams stOldValues);
 
-            if (string.IsNullOrEmpty(stNewValues.Team))
+            if (!string.IsNullOrEmpty(stNewValues.Team))
                 await UpdateCardsAsync(stNewValues, stOldValues);
         }
 
@@ -43,7 +43,7 @@ namespace FootballServices.Domain
         {
             CreateParams(newValues, oldValues, out StatisticsParams stNewValues, out StatisticsParams stOldValues);
 
-            if (string.IsNullOrEmpty(stNewValues.Team))
+            if (!string.IsNullOrEmpty(stNewValues.Team))
                 await UpdateCardsAsync(stNewValues, stOldValues);
 
             await UpdateMinutesAsync(source, stNewValues, stOldValues);
@@ -102,25 +102,28 @@ namespace FootballServices.Domain
 
             var minutes = Math.Max(newValues.Minutes - oldValues.Minutes, 0);
 
-            await UpdateAsync(common, minutes, "");
+            await UpdateAsync(common, minutes, newValues.Team);
         }
 
         private async Task UpdateAsync(StatisticsType type, int valueToAdd, string team = "")
         {
             var st = await this.repository
                                .Query
-                               .FirstOrDefaultAsync(s => s.Type.Equals(type) && s.TeamName.Equals(team));
+                               .FirstOrDefaultAsync(s => s.Type.Equals(type));
 
             if (st == null)
             {
                 st = new Statistic();
                 st.Type = type;
+                st.Name = type.ToString();
                 st.TeamName = team;
                 await this.repository.AddAsync(st);
                 await this.repository.SaveAsync();
             }
 
+            st.Name = type.ToString();
             st.Total += valueToAdd;
+
             this.repository.Update(st);
             await this.repository.SaveAsync();
         }

@@ -16,17 +16,6 @@ namespace FootballServices.Domain.Validation
             this.repository = repository;
 
             RuleFor(r => r.Name).NotEmpty().WithMessage("Referee name is required");
-            RuleFor(r => r).Must(r => NotExistsRefereeName(r)).WithMessage("The referee name is used");
-        }
-
-        public bool NotExistsRefereeName(Referee referee)
-        {
-            var q = this.repository.Query;
-
-            if (referee.Id > 0)
-                q = q.Where(r => r.Id != referee.Id);
-            
-            return q.Count(r => r.Name == referee.Name) == 0;
         }
     }
 }

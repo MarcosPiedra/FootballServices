@@ -18,5 +18,6 @@ namespace FootballServices.Domain.Models
         public StatisticsType Type { get; set; } = StatisticsType.YellowCardsByTeam;
         public string TeamName { get; set; } = "";
         public int Total { get; set; } = 0;
+        public string Name { get; internal set; }
     }
 }
