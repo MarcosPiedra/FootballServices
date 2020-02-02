@@ -37,12 +37,12 @@ namespace FootballServices.BackgroundJob
             {
                 var playersNotValids = new List<int>();
                 var playersToAdd = m.HouseTeamPlayers
-                                 .Where(p => p.RedCards >= 1 || p.YellowCards >= 5)
-                                 .Select(p => p.Id);
+                                    .Where(p => p.RedCards >= 1 || p.YellowCards >= 5)
+                                    .Select(p => p.Id);
                 playersNotValids.AddRange(playersToAdd.AsEnumerable());
                 playersToAdd = m.AwayTeamPlayers
-                             .Where(p => p.RedCards >= 1 || p.YellowCards >= 5)
-                             .Select(p => p.Id);
+                                .Where(p => p.RedCards >= 1 || p.YellowCards >= 5)
+                                .Select(p => p.Id);
                 playersNotValids.AddRange(playersToAdd.AsEnumerable());
 
                 var managersNotValids = new List<int>();
@@ -55,7 +55,8 @@ namespace FootballServices.BackgroundJob
                     managersNotValids.Add(m.HouseTeamManager.Id);
                 }
 
-                var idsNotValids = await AddNotValidsAsync(playersNotValids, RelatedType.Player, m.Id);
+                var idsNotValids = new List<int>();
+                idsNotValids.AddRange(await AddNotValidsAsync(playersNotValids, RelatedType.Player, m.Id));
                 idsNotValids.AddRange(await AddNotValidsAsync(managersNotValids, RelatedType.Manager, m.Id));
 
                 if (idsNotValids.Count > 1)

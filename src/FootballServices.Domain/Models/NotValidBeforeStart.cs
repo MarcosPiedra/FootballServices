@@ -7,7 +7,7 @@ namespace FootballServices.Domain.Models
     public enum RelatedType
     {
         Player = 0,
-        Manager = 0,
+        Manager = 1,
     }
 
     public class NotValidBeforeStart

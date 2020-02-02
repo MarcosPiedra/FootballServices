@@ -42,7 +42,7 @@ namespace FootballServices.WebAPI.Controllers
         [ProducesResponseType(typeof(List<MatchResponse>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<List<MatchResponse>>> GetAll()
         {
-            var matchList = await this.matchService.GetAllMatchesAsync();
+            var matchList = await this.matchService.GetAllAsync();
 
             if (matchList == null)
             {
