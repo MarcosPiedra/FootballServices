@@ -13,5 +13,6 @@ namespace FootballServices.Domain
         Task<List<Match>> GetAllAsync();
         void UpdateStatus(Match match);
         Task UpdateStatusAsync();
+        Task<List<Match>> GetMatchThatStartInAsync(int minutes);
     }
 }

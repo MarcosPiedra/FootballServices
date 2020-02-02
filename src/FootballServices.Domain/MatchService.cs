@@ -104,6 +104,21 @@ namespace FootballServices.Domain
             return matches;
         }
 
+        public async Task<List<Match>> GetMatchThatStartInAsync(int minutes)
+        {
+            var matches = repoMatches.Query
+                                     .Where(m => m.Status == MatchStatus.NoPlayedYet
+                                              && m.Date.Subtract(DateTime.Now).Minutes < minutes);
+
+            var matchesToReturn = new List<Match>();
+            foreach (var m in matches)
+            {
+                matchesToReturn.Add(await this.FindAsync(m.Id));
+            }
+
+            return matchesToReturn;
+        }
+
         public async Task RemoveAsync(Match match)
         {
             repoMatches.Remove(match);
@@ -130,7 +145,7 @@ namespace FootballServices.Domain
             }
             else
             {
-                match.Status = MatchStatus.NoPlayed;
+                match.Status = MatchStatus.NoPlayedYet;
             }
         }
 

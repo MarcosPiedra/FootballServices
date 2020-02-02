@@ -6,7 +6,7 @@ namespace FootballServices.Domain.Models
 {
     public enum MatchStatus
     {
-        NoPlayed = 0,
+        NoPlayedYet = 0,
         Playing = 1,
         Finished = 1,
     }
@@ -20,7 +20,7 @@ namespace FootballServices.Domain.Models
         public int HouseTeamManagerId { get; set; } = 0;
         public int AwayTeamManagerId { get; set; } = 0;
         public int RefereeId { get; set; } = 0;
-        public MatchStatus Status { get; set; } = MatchStatus.NoPlayed;
+        public MatchStatus Status { get; set; } = MatchStatus.NoPlayedYet;
         public DateTime Date { get; set; }
         public List<Player> HouseTeamPlayers { get; set; } = new List<Player>();
         public List<Player> AwayTeamPlayers { get; set; } = new List<Player>();
