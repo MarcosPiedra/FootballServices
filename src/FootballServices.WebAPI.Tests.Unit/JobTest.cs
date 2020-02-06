@@ -1,5 +1,4 @@
 using FootballServices.Domain;
-using FootballServices.Domain.DTOs;
 using FootballServices.Domain.Models;
 using FootballServices.WebAPI.Tests.Unit;
 using Microsoft.AspNetCore.TestHost;
