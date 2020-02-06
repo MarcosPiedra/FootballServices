@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using FootballServices.Domain.DTOs;
 using FootballServices.Domain.Models;
+using FootballServices.WebAPI.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

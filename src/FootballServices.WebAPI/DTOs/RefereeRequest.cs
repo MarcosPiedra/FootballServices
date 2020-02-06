@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FootballServices.Domain.DTOs
+namespace FootballServices.WebAPI.DTOs
 {
-    public class RefereeResponse
+    public class RefereeRequest
     {
         public string Name { get; set; } = "";
-        public int Id { get; set; } = 0;
         public int MinutesPlayed { get; set; } = 0;
     }
 }

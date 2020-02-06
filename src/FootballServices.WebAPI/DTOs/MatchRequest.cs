@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FootballServices.Domain.DTOs
+namespace FootballServices.WebAPI.DTOs
 {
     public class MatchRequest
     {
+        public int Id { get; set; } = 0;
         public string Name { get; set; } = "";
         public List<int> HouseTeam { get; set; } = new List<int>();
         public int HouseManager { get; set; } = 0;

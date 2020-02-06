@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
 using FootballServices.Domain;
-using FootballServices.Domain.DTOs;
 using FootballServices.Domain.Models;
+using FootballServices.WebAPI.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

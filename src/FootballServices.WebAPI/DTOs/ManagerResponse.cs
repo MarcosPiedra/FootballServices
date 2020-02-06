@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FootballServices.Domain.DTOs
+namespace FootballServices.WebAPI.DTOs
 {
     public class ManagerResponse
     {

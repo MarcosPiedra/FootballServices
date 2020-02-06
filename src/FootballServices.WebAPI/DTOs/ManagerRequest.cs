@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FootballServices.Domain.DTOs
+namespace FootballServices.WebAPI.DTOs
 {
-    public class PlayerResponse
+    public class ManagerRequest
     {
-        public string Name { get; set; } = "";
         public int Id { get; set; } = 0;
-        public int Number { get; set; } = 0;
+        public string Name { get; set; } = "";
         public string TeamName { get; set; } = "";
         public int YellowCards { get; set; } = 0;
         public int RedCards { get; set; } = 0;
-        public int MinutesPlayed { get; set; } = 0;
     }
 }
