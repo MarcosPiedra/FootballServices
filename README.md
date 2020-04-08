@@ -12,6 +12,6 @@ Jobs for update the players/managers not valids.
 	
 Technologies:
 - EFCore
-- Automapping
+- Automapper
 - FluentValidation
 - Quartz
