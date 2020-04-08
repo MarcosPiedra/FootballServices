@@ -6,7 +6,7 @@ RestAPI that you can manage:
 - Player
 - Statistics
 
-The staticstics are update when update referes/managers and players.
+The statistics are updated when updated referees/managers and players.
 	
 Jobs for update the players/managers not valids.
 	
